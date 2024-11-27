@@ -1,0 +1,79 @@
+---
+title: "Exercises"
+editor: source
+engine: knitr
+filters:
+  - webr-teachr
+  - quiz-teachr
+webr:
+  packages: ["fpp3", "urca"]
+  autoload-packages: false
+---
+
+# Time series data and patterns
+
+## Exercise 1
+
+The `pedestrian` dataset contains hourly pedestrian counts from 2015-01-01 to 2016-12-31 at 4 sensors in the city of Melbourne.
+
+The data is shown below:
+
+```{r}
+#| echo: false
+#| message: false
+library(tibble)
+as_tibble(tsibble::pedestrian)
+```
+
+::: {.callout-caution}
+## Your turn!
+
+Identify the `index` variable, `key` variable(s), and measured variable(s) of this dataset.
+:::
+
+::: {.callout-tip}
+## Hint
+
+* The `index` variable contains the complete time information
+* The `key` variable(s) identify each time series
+* The measured variable(s) are what you want to explore/forecast.
+:::
+
+::: columns
+
+::: {.column width="30%"}
+
+## `index` variable
+:::{.quiz-singlechoice}
+- [ ] [Sensor]{hint="x"}
+- [X] [Date_Time]{hint="o"}
+- [ ] [Date]{hint="x"}
+- [ ] [Time]{hint="x"}
+- [ ] [Count]{hint="x"}
+:::
+:::
+
+::: {.column width="30%"}
+
+## `key` variable(s)
+:::{.quiz-multichoice}
+- [X] [Sensor]{hint="o"}
+- [ ] [Date_Time]{hint="x"}
+- [ ] [Date]{hint="x"}
+- [ ] [Time]{hint="x"}
+- [ ] [Count]{hint="x"}
+:::
+:::
+
+::: {.column width="40%"}
+
+## measured variable(s)
+:::{.quiz-multichoice}
+- [ ] [Sensor]{hint="x"}
+- [ ] [Date_Time]{hint="x"}
+- [ ] [Date]{hint="x"}
+- [ ] [Time]{hint="x"}
+- [X] [Count]{hint="o"}
+:::
+:::
+:::

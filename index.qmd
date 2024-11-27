@@ -1,0 +1,83 @@
+---
+title: "Exploratory time series analysis"
+---
+
+![](images/fable.svg){style="float:right;padding: 0 0 0 10px;" fig-alt="Fable Hex Logo" width="175"}
+
+## Course Overview
+
+Understanding how data changes over time is essential for specifying suitable 
+forecasting models. Comprehensively exploring modern time-series datasets is
+challenging, where a large number of frequently observed time series contains 
+many patterns. This workshop introduces new exploratory techniques to uncover 
+meaningful temporal patterns in time series data.
+
+We’ll explore how to compare patterns across many series using feature-based 
+summaries. Visualizing these features reveals common temporal patterns, cluster 
+related time series, and see how these patterns vary throughout the hierarchical
+structure of the data.
+
+We'll then use a grammar of time series graphics to produce plots that clearly
+show the shape and variability in these patterns. Special attention will be 
+given to the complexities of sub-daily data (such as timezones), allowing us to
+create stunning calendar plots which uncovers holiday effects and complex
+seasonalities.
+
+This practical workshop features live demonstrations and hands-on exercises 
+using real-world data, equipping participants with the skills to effectively 
+manipulate and visualize time series data in R.
+
+This workshop will run in-person at [ISF 2025](https://isf.forecasters.org/program/workshops/) in Beijing, China on June 29th 2025.
+
+<!-- ## Registration -->
+
+## Learning objectives
+
+Participants will learn how to:
+
+1.  Use the tidyverse to wrangle and manipulate time series data
+2.  Visualize data and identify common time series patterns
+3.  Use time series features to find patterns in many time series
+4.  Apply the grammar of time series graphics to visualize complex seasonalities
+
+# Educators
+
+## Instructor
+
+![](images/mitch.jpg){style="float:right;padding: 0 0 0 10px;" fig-alt="Headshot of Mitchell O'Hara-Wild" width="200"}
+[**Mitchell O'Hara-Wild**](https://mitchelloharawild.com/) (he/him) is a PhD candidate at [Monash University](https://www.monash.edu), creating new techniques and tools for forecasting large collections of time series with Rob Hyndman and George Athanasopoulos. He is the lead developer of the tidy time-series forecasting tools fable and feasts, and has co-developed the widely used forecast package since 2015. He is an award-winning educator, and has taught applied forecasting at Monash University and various forecasting workshops around the world.
+
+<div align="center">
+<a href="https://www.mitchelloharawild.com"><img border="0" alt="Blog" src="https://assets.dryicons.com/uploads/icon/svg/4926/home.svg" width="35" height="35"></a>&ensp;
+<a href="https://github.com/mitchelloharawild"><img border="0" alt="Github" src="https://assets.dryicons.com/uploads/icon/svg/8312/cc33248a-e56e-4e7f-93f4-0e16350e5768.svg" width="35" height="35"></a>&ensp; 
+<a href="https://twitter.com/mitchoharawild"><img border="0" alt="Twitter" src="https://assets.dryicons.com/uploads/icon/svg/8385/c23f7ffc-ca8d-4246-8978-ce9f6d5bcc99.svg" width="35" height="35"></a>&ensp; 
+<a href="https://www.linkedin.com/in/mitchelloharawild/"><img border="0" alt="LinkedIn" src="https://assets.dryicons.com/uploads/icon/svg/8337/a347cd89-1662-4421-be90-58e5e8004eae.svg" width="35" height="35"></a>&ensp;&emsp;
+</div>
+
+
+# Preparation
+
+The workshop will provide a quick-start overview of exploring time series data and producing forecasts. There is no need for prior experience in time series to get the most out of this workshop.
+
+It is expected that you are comfortable with writing R code and using tidyverse packages including dplyr and ggplot2. If you are unfamiliar with writing R code or using the tidyverse, consider working through the learnr materials here: <https://learnr.numbat.space/>.
+
+Some familiarity with statistical concepts such as the mean, variance, quantiles, normal distribution, and regression would be helpful to better understand the forecasts, although this is not strictly necessary.
+
+## Required equipment
+
+Please bring your own laptop capable of running R.
+
+## Required software
+
+To be able to complete the exercises of this workshop, please install a suitable IDE (such as RStudio), a recent version of R (4.1+) and the following packages.
+
+-   **Time series packages and extensions**
+    -   fpp3
+
+The following code will install the main packages needed for the workshop.
+
+```r
+install.packages(c("fpp3"))
+```
+
+Please have the required software installed and pre-work completed before attending the workshop.
