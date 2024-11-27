@@ -1,0 +1,58 @@
+[
+  {
+    "objectID": "license.html",
+    "href": "license.html",
+    "title": "License",
+    "section": "",
+    "text": "This work is licensed under a Creative Commons Attribution 4.0 International License."
+  },
+  {
+    "objectID": "exercises.html",
+    "href": "exercises.html",
+    "title": "Exercises",
+    "section": "",
+    "text": "The pedestrian dataset contains hourly pedestrian counts from 2015-01-01 to 2016-12-31 at 4 sensors in the city of Melbourne.\nThe data is shown below:\n\n\n# A tibble: 66,037 × 5\n   Sensor         Date_Time           Date        Time Count\n   &lt;chr&gt;          &lt;dttm&gt;              &lt;date&gt;     &lt;int&gt; &lt;int&gt;\n 1 Birrarung Marr 2015-01-01 00:00:00 2015-01-01     0  1630\n 2 Birrarung Marr 2015-01-01 01:00:00 2015-01-01     1   826\n 3 Birrarung Marr 2015-01-01 02:00:00 2015-01-01     2   567\n 4 Birrarung Marr 2015-01-01 03:00:00 2015-01-01     3   264\n 5 Birrarung Marr 2015-01-01 04:00:00 2015-01-01     4   139\n 6 Birrarung Marr 2015-01-01 05:00:00 2015-01-01     5    77\n 7 Birrarung Marr 2015-01-01 06:00:00 2015-01-01     6    44\n 8 Birrarung Marr 2015-01-01 07:00:00 2015-01-01     7    56\n 9 Birrarung Marr 2015-01-01 08:00:00 2015-01-01     8   113\n10 Birrarung Marr 2015-01-01 09:00:00 2015-01-01     9   166\n# ℹ 66,027 more rows\n\n\n\n\n\n\n\n\nYour turn!\n\n\n\nIdentify the index variable, key variable(s), and measured variable(s) of this dataset.\n\n\n\n\n\n\n\n\nHint\n\n\n\n\nThe index variable contains the complete time information\nThe key variable(s) identify each time series\nThe measured variable(s) are what you want to explore/forecast."
+  },
+  {
+    "objectID": "exercises.html#exercise-1",
+    "href": "exercises.html#exercise-1",
+    "title": "Exercises",
+    "section": "",
+    "text": "The pedestrian dataset contains hourly pedestrian counts from 2015-01-01 to 2016-12-31 at 4 sensors in the city of Melbourne.\nThe data is shown below:\n\n\n# A tibble: 66,037 × 5\n   Sensor         Date_Time           Date        Time Count\n   &lt;chr&gt;          &lt;dttm&gt;              &lt;date&gt;     &lt;int&gt; &lt;int&gt;\n 1 Birrarung Marr 2015-01-01 00:00:00 2015-01-01     0  1630\n 2 Birrarung Marr 2015-01-01 01:00:00 2015-01-01     1   826\n 3 Birrarung Marr 2015-01-01 02:00:00 2015-01-01     2   567\n 4 Birrarung Marr 2015-01-01 03:00:00 2015-01-01     3   264\n 5 Birrarung Marr 2015-01-01 04:00:00 2015-01-01     4   139\n 6 Birrarung Marr 2015-01-01 05:00:00 2015-01-01     5    77\n 7 Birrarung Marr 2015-01-01 06:00:00 2015-01-01     6    44\n 8 Birrarung Marr 2015-01-01 07:00:00 2015-01-01     7    56\n 9 Birrarung Marr 2015-01-01 08:00:00 2015-01-01     8   113\n10 Birrarung Marr 2015-01-01 09:00:00 2015-01-01     9   166\n# ℹ 66,027 more rows\n\n\n\n\n\n\n\n\nYour turn!\n\n\n\nIdentify the index variable, key variable(s), and measured variable(s) of this dataset.\n\n\n\n\n\n\n\n\nHint\n\n\n\n\nThe index variable contains the complete time information\nThe key variable(s) identify each time series\nThe measured variable(s) are what you want to explore/forecast."
+  },
+  {
+    "objectID": "index.html#course-overview",
+    "href": "index.html#course-overview",
+    "title": "Exploratory time series analysis",
+    "section": "Course Overview",
+    "text": "Course Overview\nUnderstanding how data changes over time is essential for specifying suitable forecasting models. Comprehensively exploring modern time-series datasets is challenging, where a large number of frequently observed time series contains many patterns. This workshop introduces new exploratory techniques to uncover meaningful temporal patterns in time series data.\nWe’ll explore how to compare patterns across many series using feature-based summaries. Visualizing these features reveals common temporal patterns, cluster related time series, and see how these patterns vary throughout the hierarchical structure of the data.\nWe’ll then use a grammar of time series graphics to produce plots that clearly show the shape and variability in these patterns. Special attention will be given to the complexities of sub-daily data (such as timezones), allowing us to create stunning calendar plots which uncovers holiday effects and complex seasonalities.\nThis practical workshop features live demonstrations and hands-on exercises using real-world data, equipping participants with the skills to effectively manipulate and visualize time series data in R.\nThis workshop will run in-person at ISF 2025 in Beijing, China on June 29th 2025."
+  },
+  {
+    "objectID": "index.html#learning-objectives",
+    "href": "index.html#learning-objectives",
+    "title": "Exploratory time series analysis",
+    "section": "Learning objectives",
+    "text": "Learning objectives\nParticipants will learn how to:\n\nUse the tidyverse to wrangle and manipulate time series data\nVisualize data and identify common time series patterns\nUse time series features to find patterns in many time series\nApply the grammar of time series graphics to visualize complex seasonalities"
+  },
+  {
+    "objectID": "index.html#instructor",
+    "href": "index.html#instructor",
+    "title": "Exploratory time series analysis",
+    "section": "Instructor",
+    "text": "Instructor\n Mitchell O’Hara-Wild (he/him) is a PhD candidate at Monash University, creating new techniques and tools for forecasting large collections of time series with Rob Hyndman and George Athanasopoulos. He is the lead developer of the tidy time-series forecasting tools fable and feasts, and has co-developed the widely used forecast package since 2015. He is an award-winning educator, and has taught applied forecasting at Monash University and various forecasting workshops around the world."
+  },
+  {
+    "objectID": "index.html#required-equipment",
+    "href": "index.html#required-equipment",
+    "title": "Exploratory time series analysis",
+    "section": "Required equipment",
+    "text": "Required equipment\nPlease bring your own laptop capable of running R."
+  },
+  {
+    "objectID": "index.html#required-software",
+    "href": "index.html#required-software",
+    "title": "Exploratory time series analysis",
+    "section": "Required software",
+    "text": "Required software\nTo be able to complete the exercises of this workshop, please install a suitable IDE (such as RStudio), a recent version of R (4.1+) and the following packages.\n\nTime series packages and extensions\n\nfpp3\n\n\nThe following code will install the main packages needed for the workshop.\ninstall.packages(c(\"fpp3\"))\nPlease have the required software installed and pre-work completed before attending the workshop."
+  }
+]
