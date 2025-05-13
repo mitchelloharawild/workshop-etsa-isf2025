@@ -49,9 +49,17 @@ to effectively manipulate and visualize time series data in R.
 
 #### Structure
 
-Hour 1: Time series data, aggregations, and visualization basics Hour 2:
-Time series decomposition and features Hour 3: The grammar of time
-series graphics
+<!-- 
+Hour 1: Time series data, aggregations, and visualization basics 
+Hour 2: Time series decomposition and features 
+Hour 3: The grammar of time series graphics 
+-->
+
+Session 1: Time series data, aggregations, time series patterns (via
+`autoplot()`), time series decomposition and features
+
+Session 2: Calendrical visualisation with the grammar of time series
+graphics (season plots, subseries plots, calendar plots, …)
 
 ### Format
 
