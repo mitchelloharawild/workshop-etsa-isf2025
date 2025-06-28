@@ -1,0 +1,1470 @@
+---
+from: markdown+emoji
+execute:
+  cache: true
+format:
+  letterbox-revealjs:
+    theme: [default]
+    css: [theme.css, hex.css]
+    progress: false
+    menu: false
+    width: 1280
+    height: 720
+filters:
+  - custom-callouts
+callout-appearance: simple
+editor_options: 
+  chunk_output_type: console
+---
+
+```{r}
+#| include: false
+library(fpp3)
+```
+
+## {}
+
+::: columns
+::: {.column width="40%"}
+:::
+::: {.column width="60%"}
+
+::: {.title data-id="title"}
+Tidy time series analysis and forecasting
+:::
+
+::: {.subtitle data-id="subtitle"}
+Time series data and patterns
+:::
+
+::: {.dateplace}
+29th June 2025 @ ISF 2025
+:::
+
+##### Mitchell O'Hara-Wild, Nectric
+
+::: {.callout-link}
+
+## Useful links
+
+![](resources/forum.svg){.icon} [social.mitchelloharawild.com](https://social.mitchelloharawild.com/)
+
+![](resources/projector-screen-outline.svg){.icon} [workshop.nectric.com.au/isf2025/](https://workshop.nectric.com.au/isf2025/)
+
+![](resources/github.svg){.icon} [mitchelloharawild/workshop-etsa-isf2025](https://github.com/mitchelloharawild/workshop-etsa-isf2025)
+
+:::
+
+:::
+:::
+
+![](../backgrounds/sander-weeteling-KABfjuSOx74-unsplash.jpg){.image-left}
+
+
+## {}
+
+
+::: columns
+::: {.column width="60%"}
+
+::: {.callout}
+## :dart: Today's goals
+
+1. Learn about tidy time series data.
+2. Wrangle and summarise time series data.
+3. Use temporal features to find patterns in many series. 
+4. Explore complex seasonalities and holiday patterns.
+:::
+
+::: {.callout .fragment}
+## :sunflower: Expectations
+
+1. Follow the code of conduct.
+2. Be kind and respectful.
+3. Ask relevant questions any time, Q&A during breaks.
+4. Make mistakes and learn!
+:::
+
+[<https://workshop.nectric.com.au/user2024/>]{.fragment}
+
+:::
+:::
+
+![](../backgrounds/balint-mendlik-4-ORHffEh3I-unsplash.jpg){.image-right}
+
+## {}
+
+::: columns
+::: {.column width="35%"}
+
+### Mitchell O'Hara‑Wild
+
+#### Monash + Nectric
+
+[![](resources/github.svg){.icon} @mitchelloharawild](https://github.com/mitchelloharawild)
+
+[![](resources/linkedin.svg){.icon} @mitchelloharawild](https://www.linkedin.com/in/mitchelloharawild/)
+
+
+:::
+
+::: {.column width="65%"}
+
+### Welcome, who am I?
+
+- :mortar_board: PhD candidate at Monash University
+- :bar_chart: Data consulting and workshops at Nectric
+- :chart_with_upwards_trend: Specialised in time series analysis
+- :package: Develops R packages (**fable**, vitae, etc.)
+- :robot: DIYs IoT devices for home automation
+- :seedling: Permaculturist (:bee:, :hatching_chick:, :mushroom:, :sun_with_face:)
+
+:::
+:::
+
+![](../backgrounds/john-fowler-RsRTIofe0HE-unsplash.jpg){.image-left}
+
+## {}
+
+
+
+::: columns
+::: {.column width="35%"}
+
+### You!
+
+#### ISF attendee
+
+:::
+
+::: {.column width="65%"}
+
+### :raising_hand: Hi, who are you?
+
+Hands up if...
+
+::: {.incremental}
+* :technologist: You've used R
+* :bar_chart: You've analysed data
+* :bubbles: Used tidyverse packages (dplyr, ggplot2...)
+* :chart_with_upwards_trend: You've worked with time series data before
+* :framed_picture: You've created standard time series plots
+* :art: You've made custom time series graphics
+:::
+
+:::
+:::
+
+![](../backgrounds/john-fowler-RsRTIofe0HE-unsplash.jpg){.image-left}
+
+
+## {}
+
+::: columns
+::: {.column width="60%"}
+
+### Tidy time series analysis
+
+This workshop is about **tidy** time series in R.
+
+:::{.fragment .fade-in}
+We'll be using these packages!
+
+:::{.hextile .clr}
+* ![](resources/tsibble.png)
+* ![](resources/mixtime.svg)
+* ![](resources/feasts.svg)
+* ![](resources/tsibbledata.svg)
+* ![](resources/tidyverse.svg)
+:::
+
+:::
+
+
+:::
+:::
+
+![](../backgrounds/david-pisnoy-46juD4zY1XA-unsplash.jpg){.image-right}
+
+## {}
+
+::: columns
+::: {.column width="60%"}
+
+### Tidy time series packages
+
+This workshop is about **tidy** time series in R.
+
+Install them with:
+
+```{r}
+#| eval: false
+#| echo: true
+# The tidy forecasting packages
+install.packages("fpp3")
+
+# The latest time series analysis packages
+# (these will be on CRAN soon!)
+remotes::install_github(c(
+  "mitchelloharawild/vecvec",
+  "mitchelloharawild/mixtime",
+  "mitchelloharawild/ggtime"
+))
+```
+
+:::
+:::
+
+![](../backgrounds/david-pisnoy-46juD4zY1XA-unsplash.jpg){.image-right}
+
+## {}
+
+::: columns
+::: {.column width="60%"}
+
+### Tidy time series packages
+
+```r
+# Data manipulation
+library(dplyr)
+# Plotting functions
+library(ggplot2)
+# Mixed vectors of time
+library(mixtime)
+# Time series class
+library(tsibble)
+# Tidy time series datasets
+library(tsibbledata)
+# Feature extraction and statistics
+library(feasts)
+# Time series graphics
+library(ggtime)
+```
+
+:::
+:::
+
+![](../backgrounds/david-pisnoy-46juD4zY1XA-unsplash.jpg){.image-right}
+
+## {}
+
+::: columns
+
+::: {.column width="40%"}
+:::
+
+::: {.column width="60%"}
+
+### Time series data
+
+- Four-yearly Olympic winning times
+- Annual Google profits
+- Quarterly Australian beer production
+- Monthly pharmaceutical subsidies
+- Weekly retail sales
+- Daily COVID-19 infections
+- Hourly electricity demand
+- Minutely blood glucose measurements
+- Time-stamped stock transaction data
+
+:::
+:::
+
+![](../backgrounds/chris-lee-70l1tDAI6rM-unsplash.jpg){.image-left}
+
+## {}
+
+::: columns
+
+::: {.column width="40%"}
+:::
+
+::: {.column width="60%"}
+
+### Time series data
+
+Comes in all shapes and sizes!
+
+Like all data, we hope it's tidy :broom:
+
+::: {.callout-tip .fragment}
+## All time series data contain...
+
+* The time of the observation (*index*)
+* One or more observations (*measurements*)
+
+:::{.fragment .fade-in}
+Some datasets have identifying metadata,
+
+* Identifying variables for the series (*key*)
+:::
+:::
+
+:::
+:::
+
+![](../backgrounds/chris-lee-70l1tDAI6rM-unsplash.jpg){.image-left}
+
+
+## {}
+
+::: columns
+
+::: {.column width="40%"}
+:::
+
+::: {.column width="60%"}
+
+### The tsibble data format
+
+![](resources/tsibble.png){.sticker-float-right}
+
+A tsibble is a tibble for time series!
+
+The quarterly visitors to Australia are found in the `tourism` dataset.
+
+```{r}
+#| echo: true
+#| message: false
+library(fpp3)
+tourism
+```
+
+
+:::
+:::
+
+![](../backgrounds/chris-lee-70l1tDAI6rM-unsplash.jpg){.image-left}
+
+## {}
+
+::: columns
+
+::: {.column width="40%"}
+:::
+
+::: {.column width="60%"}
+
+
+```{r}
+#| message: false
+library(fpp3)
+as_tibble(tourism)
+```
+
+:::{.callout-tip}
+## Column types
+
+In this dataset, the column types are:
+
+* `index` variable: [`Quarter`]{.fragment .fade-in}
+* `key` variable(s): [`Region`, `State`, and `Purpose`]{.fragment .fade-in}
+* measured variable(s): [`Trips`]{.fragment .fade-in}
+
+:::
+
+:::
+:::
+
+![](../backgrounds/chris-lee-70l1tDAI6rM-unsplash.jpg){.image-left}
+
+## {}
+
+::: columns
+
+::: {.column width="40%"}
+:::
+
+::: {.column width="60%"}
+
+```{r}
+#| eval: false
+#| echo: true
+pedestrian
+```
+```{r}
+#| message: false
+as_tibble(pedestrian)
+```
+
+:::{.callout-caution}
+## Exercise 1
+
+In this dataset, which columns are:
+
+* index variable(s)?
+* key variable(s)?
+* measured variable(s)?
+
+:::
+
+:::
+:::
+
+![](../backgrounds/chris-lee-70l1tDAI6rM-unsplash.jpg){.image-left}
+
+
+## {}
+
+::: columns
+
+::: {.column width="40%"}
+:::
+
+::: {.column width="60%"}
+
+### Our first tsibble
+
+A **ts**ibble is a ***t**ime **s**eries* tibble.
+
+It is created with `as_tsibble()`.
+
+```{r}
+#| echo: true
+tourism |> 
+  as_tsibble(
+    key = c(Region, State, Purpose),
+    index = Quarter
+  )
+```
+
+:::
+:::
+
+![](../backgrounds/jon-tyson-FlHdnPO6dlw-unsplash.jpg){.image-left}
+
+
+## {}
+
+::: columns
+
+::: {.column width="40%"}
+:::
+
+::: {.column width="60%"}
+
+### Our first tsibble
+
+::: {.callout-caution}
+## Exercise 2
+
+Identify the `index` and `key` variables of the `aus_accommodation` dataset.
+
+Then use `as_tsibble()` to convert it into a tsibble.
+
+```{r}
+#| eval: false
+#| echo: true
+library(fpp3)
+read.csv(
+  "https://workshop.nectric.com.au/user2024/data/aus_accommodation.csv"
+)
+```
+
+:::
+
+:::
+:::
+
+![](../backgrounds/jon-tyson-FlHdnPO6dlw-unsplash.jpg){.image-left}
+
+
+## {}
+
+::: columns
+
+::: {.column width="40%"}
+:::
+
+::: {.column width="60%"}
+
+### Representing time indices
+
+![](resources/mixtime.svg){.sticker-float-right}
+
+Time is surprisingly tricky to represent!
+
+* frequency
+* granularity
+* time zones
+* calendars
+* leap years (and seconds?!)
+* holidays
+* civil/absolute time
+* time periods
+
+:::
+:::
+
+![](../backgrounds/jon-tyson-FlHdnPO6dlw-unsplash.jpg){.image-left}
+
+
+## {}
+
+::: columns
+
+::: {.column width="40%"}
+:::
+
+::: {.column width="60%"}
+
+### Representing time indices
+
+![](resources/mixtime.svg){.sticker-float-right}
+
+Common time points can be created with these functions:
+
+```{r}
+tribble(
+  ~`Granularity`, ~Function,
+  "Annual", "`start:end`",
+  "Quarterly", "`yearquarter()`",
+  "Monthly", "`yearmonth()`",
+  "Weekly", "`yearweek()`",
+  "Daily", "`as_date()`, `ymd()`",
+  "Sub-daily", "`as_datetime()`"
+) |>
+  knitr::kable(booktabs = TRUE)
+```
+
+
+:::
+:::
+
+![](../backgrounds/jon-tyson-FlHdnPO6dlw-unsplash.jpg){.image-left}
+
+
+## {}
+
+::: columns
+
+::: {.column width="40%"}
+:::
+
+::: {.column width="60%"}
+
+### Creating a tsibble
+
+1. Tidy the data into a long format
+2. Appropriately class the time variable
+3. Convert to tsibble with `as_tibble()`, identifying the `index` and `key` variable(s).
+
+::: {.callout-caution}
+## Follow along
+
+Let's convert the tourism dataset into a tsibble.
+
+```{r}
+#| eval: false
+#| echo: true
+library(fpp3)
+read.csv(
+  "https://workshop.nectric.com.au/user2024/data/tourism.csv"
+)
+```
+
+:::
+
+:::
+:::
+
+![](../backgrounds/jon-tyson-FlHdnPO6dlw-unsplash.jpg){.image-left}
+
+
+
+## {}
+
+::: columns
+
+::: {.column width="40%"}
+:::
+
+::: {.column width="60%"}
+
+### Creating a tsibble
+
+1. Tidy the data into a long format
+2. Appropriately class the time variable
+3. Convert to tsibble with `as_tibble()`, identifying the `index` and `key` variable(s).
+
+::: {.callout-caution}
+## Exercise 3
+
+Redo the previous exercise, but this time use the appropriate time class for the index variable.
+
+You should see the frequency of the tsibble matches the quarterly frequency of the measurements.
+
+:::
+
+:::
+:::
+
+![](../backgrounds/jon-tyson-FlHdnPO6dlw-unsplash.jpg){.image-left}
+
+
+## {}
+
+::: columns
+
+::: {.column width="60%"}
+
+### Manipulating time series data
+
+Tidy time series data uses tidyverse tools!
+
+::: {.callout-caution}
+## Exercise 4
+
+Try calculating the total tourists visiting Victoria from the `tourism` dataset.
+
+*Hint: use `filter()` to keep only visitors to "Victoria", then `summarise()` to calculate the total trips.*
+
+:::
+
+:::
+:::
+
+![](../backgrounds/randy-fath-R5_1N6ZgCOo-unsplash.jpg){.image-right}
+
+## {}
+
+::: columns
+
+::: {.column width="60%"}
+
+### Manipulating time series data
+
+However there are some differences when working with time...
+
+The time `index` is always preserved (implicit `group_by()`).
+
+::: {.callout-tip}
+## Grouping across time
+
+Sometimes you want to summarise over time.
+
+Summarising over all of time is no longer a time series, so first convert to a tibble with `as_tibble()`.
+
+To re-index by a new variable, use `index_by()`.
+:::
+
+:::
+:::
+
+![](../backgrounds/randy-fath-R5_1N6ZgCOo-unsplash.jpg){.image-right}
+
+
+## {}
+
+::: columns
+
+::: {.column width="40%"}
+:::
+
+::: {.column width="60%"}
+
+### Visualising time series
+
+Time series visualisation helps us identify *time series patterns*.
+
+These patterns include:
+
+* trends
+* seasonalities
+* cycles
+* covariates
+* events
+
+They also help identify anomalies/outliers.
+
+:::
+
+:::
+:::
+
+![](../backgrounds/nathan-dumlao-5Hl5reICevY-unsplash.jpg){.image-left}
+
+
+## {}
+
+::: columns
+
+::: {.column width="40%"}
+:::
+
+::: {.column width="60%"}
+
+### Time plots
+
+The most common time series graphic is the "time plot", created with `autoplot()`.
+
+```{r}
+#| echo: true
+pbs_scripts <- PBS |>
+  summarise(Scripts = sum(Scripts))
+pbs_scripts |>
+  autoplot(Scripts)
+```
+
+:::
+:::
+
+![](../backgrounds/nathan-dumlao-5Hl5reICevY-unsplash.jpg){.image-left}
+
+<!-- ## {} -->
+
+<!-- ::: columns -->
+
+<!-- ::: {.column width="40%"} -->
+<!-- ::: -->
+
+<!-- ::: {.column width="60%"} -->
+
+<!-- ::: {.callout} -->
+<!-- ## Seasonal plots -->
+
+<!-- The `gg_season()` plots help identify peaks and troughs in seasonal patterns. -->
+
+<!-- ```{r} -->
+<!-- #| echo: true -->
+<!-- pbs_scripts |> -->
+<!--   gg_season(Scripts) -->
+<!-- ``` -->
+<!-- ::: -->
+
+<!-- ::: -->
+<!-- ::: -->
+
+<!-- ![](../backgrounds/nathan-dumlao-5Hl5reICevY-unsplash.jpg){.image-left} -->
+
+
+<!-- ## {} -->
+
+<!-- ::: columns -->
+
+<!-- ::: {.column width="40%"} -->
+<!-- ::: -->
+
+<!-- ::: {.column width="60%"} -->
+
+<!-- ::: {.callout} -->
+<!-- ## Seasonal sub-series plots -->
+
+<!-- The `gg_subseries()` plots help identify changes in seasonal patterns. -->
+
+<!-- ```{r} -->
+<!-- #| echo: true -->
+<!-- pbs_scripts |> -->
+<!--   gg_subseries(Scripts) -->
+<!-- ``` -->
+<!-- ::: -->
+
+<!-- ::: -->
+<!-- ::: -->
+
+<!-- ![](../backgrounds/nathan-dumlao-5Hl5reICevY-unsplash.jpg){.image-left} -->
+
+
+## {}
+
+::: columns
+
+::: {.column width="40%"}
+:::
+
+::: {.column width="60%"}
+
+### ACF plots
+
+An ACF plot shows autocorrelations (lagged relationships). This helps to identify trends, seasons and cycles.
+
+```{r}
+#| echo: true
+pbs_scripts |>
+  ACF(Scripts) |> 
+  autoplot()
+```
+
+:::
+:::
+
+![](../backgrounds/nathan-dumlao-5Hl5reICevY-unsplash.jpg){.image-left}
+
+## {}
+
+::: columns
+
+::: {.column width="40%"}
+:::
+
+::: {.column width="60%"}
+
+### Visualising time series
+
+::: {.callout-caution}
+## Exercise 5
+
+Visualise and describe the temporal patterns of visitors to Victoria in the `tourism` dataset.
+
+Here's some code to get you started:
+
+```{r}
+#| echo: true
+vic_tourism <- tourism |> 
+  filter(State == "Victoria") |> 
+  summarise(Trips = sum(Trips))
+vic_tourism |> 
+  autoplot(Trips)
+```
+
+
+:::
+
+:::
+:::
+
+![](../backgrounds/nathan-dumlao-5Hl5reICevY-unsplash.jpg){.image-left}
+
+## {}
+
+### Seasonal or Cyclical?
+
+These common patterns are commonly confused, can you tell them apart?
+
+::: {.callout-tip}
+## What's the difference?
+
+
+Seasonal patterns have...
+
+* **Consistent** and predictable shape,
+* Repeats with a **fixed time period**
+
+Cyclical patterns have...
+
+* **Inconsistent** shape and amplitude,
+* Repeats with a **variable time period**
+
+:::
+
+## {}
+
+### Seasonal or Cyclical?
+
+These common patterns are commonly confused, can you tell them apart?
+
+```{r}
+library(patchwork)
+(autoplot(as_tsibble(USAccDeaths), value)+ylab(NULL))/autoplot(ACF(as_tsibble(USAccDeaths), value))
+```
+
+## {}
+
+### Seasonal or Cyclical?
+
+These common patterns are commonly confused, can you tell them apart?
+
+```{r}
+library(patchwork)
+(autoplot(pelt, Lynx)+ylab(NULL))/autoplot(ACF(pelt, Lynx))
+```
+
+## {}
+
+### Seasonal or Cyclical?
+
+These common patterns are commonly confused, can you tell them apart?
+
+```{r}
+library(patchwork)
+(autoplot(as_tsibble(sunspot.year), value)+ylab(NULL))/autoplot(ACF(as_tsibble(sunspot.year), value))
+```
+
+## {}
+
+### Seasonal or Cyclical?
+
+These common patterns are commonly confused, can you tell them apart?
+
+```{r}
+library(patchwork)
+(autoplot(aus_production, Beer)+ylab(NULL))/autoplot(ACF(aus_production, Beer))
+```
+
+## {}
+
+::: columns
+::: {.column width="60%"}
+### Time series decomposition
+
+Decomposition separates time series patterns into individual series.
+
+::: callout-tip
+
+## Additive decomposition via STL
+
+$$y_t = S_t + T_t + R_t$$
+
+* $y_t=$ data at time $t$
+* $T_t=$ trend-cycle component at time $t$
+* $S_t=$ seasonal component at time $t$
+* $R_t=$ remainder component at time $t$
+
+:::
+
+:::
+:::
+
+![](../backgrounds/laura-geror-lGeAZjIhQyo-unsplash.jpg){.image-right}
+
+## {}
+
+::: columns
+::: {.column width="60%"}
+### Additive & multiplicative patterns
+
+STL only works with additive patterns
+
+$$y_t = S_t + T_t + R_t$$
+
+
+```{r}
+#| echo: true
+#| code-fold: true
+library(ggplot2)
+
+i <- 1:119
+pattern_types_demo <- tsibble(
+  time = yearmonth(i),
+  season = sin(i*2*pi/12),
+  trend = i,
+  remainder = rnorm(length(i)),
+  index = time
+)
+pattern_types_demo |> 
+  tidyr::pivot_longer(c(season, trend, remainder)) |> 
+  ggplot(aes(x = time, y = value, group = name)) +
+  geom_line() +
+  facet_grid(vars(name), scales = "free_y") + 
+  labs(x = NULL, y = NULL)
+```
+
+:::
+:::
+
+![](../backgrounds/laura-geror-lGeAZjIhQyo-unsplash.jpg){.image-right}
+
+## {}
+
+::: columns
+::: {.column width="60%"}
+### Additive & multiplicative patterns
+
+$$y_t = S_t + T_t + R_t$$
+
+```{r}
+#| echo: true
+#| code-fold: true
+pattern_types_demo |>
+  autoplot(trend + 10*season + 3*remainder)
+```
+
+:::
+:::
+
+![](../backgrounds/laura-geror-lGeAZjIhQyo-unsplash.jpg){.image-right}
+
+
+## {}
+
+::: columns
+::: {.column width="60%"}
+### Additive & multiplicative patterns
+
+$$y_t = S_t \times T_t \times R_t$$
+
+```{r}
+#| echo: true
+#| code-fold: true
+pattern_types_demo |>
+  autoplot((2 + season) * trend * (5 + remainder))
+```
+
+:::
+:::
+
+![](../backgrounds/laura-geror-lGeAZjIhQyo-unsplash.jpg){.image-right}
+
+
+
+## {}
+
+::: columns
+::: {.column width="60%"}
+### Additive or multiplicative?
+
+```{r}
+#| code-fold: true
+pbs_scripts |>
+  autoplot(Scripts)
+```
+
+::: fragment
+
+::: callout-tip
+## Additive!
+
+STL works for the patterns in this dataset.
+
+:::
+
+:::
+
+:::
+:::
+
+![](../backgrounds/laura-geror-lGeAZjIhQyo-unsplash.jpg){.image-right}
+
+## {}
+
+::: columns
+::: {.column width="60%"}
+### Additive or multiplicative?
+
+```{r}
+#| code-fold: true
+aus_retail |>
+  summarise(Turnover = sum(Turnover)) |> 
+  autoplot(Turnover)
+```
+
+::: fragment
+
+::: callout-important
+## Multiplicative!
+
+STL won't accurately decompose the patterns in this data.
+
+:::
+
+:::
+
+
+:::
+:::
+
+![](../backgrounds/laura-geror-lGeAZjIhQyo-unsplash.jpg){.image-right}
+
+## {}
+
+::: columns
+::: {.column width="60%"}
+### STL for multiplicative patterns
+
+While STL doesn't work directly with multiplicative patterns, we have a *transformational* trick :magic_wand:
+
+::: {.fragment .fade-in}
+
+\begin{align}
+y_t &= S_t \times T_t \times R_t\\
+\log(y_t) &= \log\left(S_t \times T_t \times R_t\right)\log\\
+&= \log(S_t) + \log(T_t) + \log(R_t)
+\end{align}
+
+:::
+
+::: {.fragment .fade-in}
+::: {.callout-tip}
+## Other transformations
+
+Multiplicative patterns aren't always *exactly* multiplicative. Instead we often use power transformations via `box_cox(y, lambda)`.
+
+More info: <https://otexts.com/fpp3/transformations.html>
+::: 
+:::
+
+
+:::
+:::
+
+![](../backgrounds/laura-geror-lGeAZjIhQyo-unsplash.jpg){.image-right}
+
+
+## {}
+
+::: columns
+::: {.column width="60%"}
+### STL decomposition
+
+Estimate STL decomposition with `STL()`.
+
+```{r}
+#| echo: true
+#| code-line-numbers: "4"
+library(feasts)
+dcmp <- tourism |> 
+  summarise(Trips = sum(Trips)) |> 
+  model(STL(Trips)) |> 
+  components()
+dcmp
+```
+
+
+:::
+:::
+
+![](../backgrounds/laura-geror-lGeAZjIhQyo-unsplash.jpg){.image-right}
+
+<!-- ![](resources/feasts.svg){.sticker-float-right} -->
+
+
+## {}
+
+::: columns
+::: {.column width="60%"}
+### STL decomposition
+
+Access decomposition with `components()`.
+
+```{r}
+#| code-line-numbers: "5"
+#| echo: true
+library(feasts)
+dcmp <- tourism |> 
+  summarise(Trips = sum(Trips)) |> 
+  model(STL(Trips)) |> 
+  components()
+dcmp
+```
+
+
+:::
+:::
+
+![](../backgrounds/laura-geror-lGeAZjIhQyo-unsplash.jpg){.image-right}
+
+<!-- ![](resources/feasts.svg){.sticker-float-right} -->
+
+## {}
+
+::: columns
+::: {.column width="60%"}
+### STL decomposition
+
+Plot the decomposition with `autoplot()`
+
+```{r}
+#| echo: true
+dcmp |> 
+  autoplot()
+```
+
+
+:::
+:::
+
+![](../backgrounds/laura-geror-lGeAZjIhQyo-unsplash.jpg){.image-right}
+
+<!-- ![](resources/feasts.svg){.sticker-float-right} -->
+
+## {}
+
+::: columns
+::: {.column width="60%"}
+### STL decomposition
+
+STL decomposition effectively separates trend and seasonality from the data.
+
+This helps to more clearly see the underlying changes over time.
+
+::: {.callout-tip}
+## Fine-tuning decomposition
+
+While the defaults usually work well, it's worth learning how to adjust the decomposition for better results.
+
+More info: <https://otexts.com/fpp3/stl.html>
+::: 
+
+
+:::
+:::
+
+![](../backgrounds/laura-geror-lGeAZjIhQyo-unsplash.jpg){.image-right}
+
+## {}
+
+::: columns
+::: {.column width="60%"}
+### Seasonal adjustment
+
+Seasonally adjusted data removes seasonal patterns to clearly see underlying trends.
+
+Adjusted data is in the `season_adjust` column.
+
+```{r}
+as_tsibble(dcmp) |> 
+  autoplot(Trips, colour = "#aeaeae") + 
+  geom_line(aes(y = trend), colour = "steelblue") +
+  geom_line(aes(y = season_adjust), colour = "hotpink")
+```
+
+
+:::
+:::
+
+![](../backgrounds/laura-geror-lGeAZjIhQyo-unsplash.jpg){.image-right}
+
+<!-- ![](resources/feasts.svg){.sticker-float-right} -->
+
+## {}
+
+::: columns
+::: {.column width="40%"}
+:::
+::: {.column width="60%"}
+### Exploring many series
+
+Most datasets contain many related time series identified by one or more keys.
+
+For example, `tourism` contains 304 series.
+
+```{r}
+#| echo: true
+tourism |> 
+  distinct(Region, State, Purpose)
+```
+
+
+:::
+:::
+
+![](../backgrounds/jon-tyson-FlHdnPO6dlw-unsplash.jpg){.image-left}
+
+
+## {}
+
+::: columns
+::: {.column width="40%"}
+:::
+::: {.column width="60%"}
+### Exploring many series
+
+This can make visualising the patterns of each time series challenging.
+
+```{r}
+#| echo: true
+tourism |> 
+  autoplot() + 
+  guides(colour = "none")
+```
+
+
+:::
+:::
+
+![](../backgrounds/jon-tyson-FlHdnPO6dlw-unsplash.jpg){.image-left}
+
+
+## {}
+
+::: columns
+::: {.column width="40%"}
+:::
+::: {.column width="60%"}
+### Time series features
+
+Instead we can calculate **features** of the time series, which summarise patterns over time.
+
+```{r}
+#| echo: true
+tourism |> 
+  features(Trips, feat_stl)
+```
+
+
+:::
+:::
+
+![](../backgrounds/jon-tyson-FlHdnPO6dlw-unsplash.jpg){.image-left}
+
+
+## {}
+
+::: columns
+::: {.column width="40%"}
+:::
+::: {.column width="60%"}
+### Time series features
+
+STL decomposition based features include:
+
+::: callout-note
+## Seasonal strength (`season_strength_year`)
+
+The signal to noise ratio of seasonality from 0-1.
+
+$$\max\left(0, 1-\frac{\text{Var}(R_t)}{\text{Var}(S_t+R_t)}\right)$$
+:::
+
+::: callout-note
+## Trend strength (`trend_strength`)
+
+The signal to noise ratio of trend from 0-1.
+
+$$\max\left(0, 1-\frac{\text{Var}(R_t)}{\text{Var}(T_t+R_t)}\right)$$
+:::
+
+:::
+:::
+
+![](../backgrounds/jon-tyson-FlHdnPO6dlw-unsplash.jpg){.image-left}
+
+
+## {}
+
+::: columns
+::: {.column width="40%"}
+:::
+::: {.column width="60%"}
+### Plotting features
+
+These features can then be plotted to reveal the patterns and structure of many series.
+
+```{r}
+#| label: features-plot
+#| echo: true
+#| fig-height: 5.5
+tourism |>
+  features(Trips, feat_stl) |>
+  ggplot(aes(x = trend_strength, y = seasonal_strength_year, col = Purpose)) +
+  geom_point() + facet_wrap(vars(State))
+```
+
+:::
+:::
+
+![](../backgrounds/jon-tyson-FlHdnPO6dlw-unsplash.jpg){.image-left}
+
+## {}
+
+::: columns
+::: {.column width="40%"}
+:::
+::: {.column width="60%"}
+### The most seasonal series
+
+```{r}
+#| label: season-plot
+#| echo: true
+#| fig-height: 5.5
+tourism |>
+  features(Trips, feat_stl) |>
+  slice_max(seasonal_strength_year, n = 3) |> 
+  inner_join(x = tourism, y = _, by = join_by(Region, State, Purpose)) |> 
+  ggplot(aes(x = Quarter, y = Trips)) + geom_line() + 
+  facet_grid(vars(Region, State, Purpose), scales = "free_y")
+```
+
+:::
+:::
+
+![](../backgrounds/jon-tyson-FlHdnPO6dlw-unsplash.jpg){.image-left}
+
+## {}
+
+::: columns
+::: {.column width="40%"}
+:::
+::: {.column width="60%"}
+### The most 'trendy' series
+
+```{r}
+#| label: trend-plot
+#| echo: true
+#| fig-height: 5.5
+tourism |>
+  features(Trips, feat_stl) |>
+  slice_max(trend_strength, n = 3) |> 
+  inner_join(x = tourism, y = _, by = join_by(Region, State, Purpose)) |> 
+  ggplot(aes(x = Quarter, y = Trips)) + geom_line() + 
+  facet_grid(vars(Region, State, Purpose), scales = "free_y")
+```
+
+:::
+:::
+
+![](../backgrounds/jon-tyson-FlHdnPO6dlw-unsplash.jpg){.image-left}
+
+
+## :alarm_clock: Time for a break!
+
+::: columns
+::: {.column width="60%"}
+
+
+::: {.callout-tip}
+## Up next...
+
+* Exploring seasonal patterns
+* Multiple seasonality
+* Holiday effects
+:::
+
+::: {.callout-link}
+## Useful links
+
+![](resources/forum.svg){.icon} [social.mitchelloharawild.com](https://social.mitchelloharawild.com/)
+
+![](resources/projector-screen-outline.svg){.icon} [workshop.nectric.com.au/isf2025/](https://workshop.nectric.com.au/isf2025/)
+
+![](resources/github.svg){.icon} [mitchelloharawild/workshop-etsa-isf2025](https://github.com/mitchelloharawild/workshop-etsa-isf2025)
+
+:::
+
+:::
+:::
+
+![](../backgrounds/sander-weeteling-KABfjuSOx74-unsplash.jpg){.image-right}
+
+<!-- Made with :heart: and [Quarto](https://quarto.org/). -->
+
+
+## Unsplash credits
+
+::: {.callout-unsplash}
+
+## Thanks to these Unsplash contributors for their photos
+
+```{r unsplash}
+#| echo: FALSE
+#| cache: TRUE
+library(httr)
+library(purrr)
+unsplash_pattern <- ".*-(.{11})-unsplash\\.jpg.*"
+slides <- readLines("index.qmd")
+backgrounds <- slides[grepl("../backgrounds/.+?unsplash.jpg", slides)]
+images <- unique(sub(".*\\(backgrounds/(.+?)\\).*", "\\1", backgrounds))
+images <- images[grepl(unsplash_pattern, images)]
+ids <- sub(unsplash_pattern, "\\1", images)
+
+get_unsplash_credit <- function(id) {
+  unsplash_url <- "https://api.unsplash.com/" 
+  my_response <- httr::GET(unsplash_url, path = c("photos", id), query = list(client_id=Sys.getenv("UNSPLASH_ACCESS")))
+  xml <- content(my_response)
+  
+  name <- xml$user$name
+  desc <- xml$description%||%"Photo"
+  sprintf(
+    "* %s: [%s%s](%s)",
+    name,
+    strtrim(desc,60-nchar(name)),
+    if(nchar(desc)>(60-nchar(name))) "..." else "",
+    modify_url("https://unsplash.com/", path = file.path("photos", xml$id))
+  )
+}
+htmltools::includeMarkdown(paste0(map_chr(ids, get_unsplash_credit), collapse = "\n"))
+```
+
+:::
+
+<!-- ## References -->

@@ -33,14 +33,12 @@ website:
     pinned: true
     align: center
     left:
-    # - text: Slides
-    #   menu:
-    #     - text: Time series data and patterns
-    #       href: slides/analysis/
-    #     - text: Modelling and forecasting
-    #       href: slides/modelling/
-    #     - text: Accuracy evaluation
-    #       href: slides/accuracy/
+    - text: Slides
+      menu:
+        - text: Time series data and patterns
+          href: slides/patterns/
+        - text: Seasonality and calendrical patterns
+          href: slides/seasons/
     # - text: Feedback
     #   href: https://feedback.nectric.com.au/pZ26
     - text: Exercises
