@@ -53,9 +53,32 @@ Hour 2: Time series decomposition and features
 Hour 3: The grammar of time series graphics 
 -->
 
-Session 1: Time series data, aggregations, time series patterns (via `autoplot()`), time series decomposition and features
+**Session 1** (13:00 - 14:20)
 
-Session 2: Calendrical visualisation with the grammar of time series graphics (season plots, subseries plots, calendar plots, ...)
+The first session explores common time series patterns.
+Starting with identifying trend and seasonality in a single time series, we will work toward summarising patterns across a large collections of time series.
+
+* Time series data
+* Temporal granularity, statistics, and aggregation
+* Time series patterns and time plots
+* STL decomposition
+* Feature analysis
+
+**Session 2** (14:30 - 15:50)
+
+The second session focuses on calendrical patterns such as seasonality and holidays.
+We will start with visualising seasonal patterns in highly aggregated quarterly data and work toward visualising complex seasonal patterns in sub-daily data.
+
+* Seasonal plots (aes/data -> scale -> coord)
+* Seasonal sub-series plots
+* Exploring seasonality after STL decomposition
+* Multiple seasonality in daily and sub-daily data
+* Local/civil and global/absolute time
+* Calendar plots
+
+**User-study** (15:50 - 16:00)
+
+
 
 ### Format
 
