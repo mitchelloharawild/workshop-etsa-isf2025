@@ -85,12 +85,46 @@ Time series data and patterns
 4. Make mistakes and learn!
 :::
 
-[<https://workshop.nectric.com.au/user2024/>]{.fragment}
+[<https://workshop.nectric.com.au/isf2025/>]{.fragment}
 
 :::
 :::
 
 ![](../backgrounds/balint-mendlik-4-ORHffEh3I-unsplash.jpg){.image-right}
+
+
+## {}
+
+
+::: columns
+::: {.column width="60%"}
+
+::: {.callout}
+## :mortar_board: Active research
+
+Some of the content in this workshop is active research.
+
+We want to make time series data visualisation easier, and are creating new R packages and conceptual frameworks for visualising time with calendars.
+
+Anonymous responses to polls, the end-of-class survey, and workshop discussions will be collected for research purposes.
+
+You can find the explanatory statement for this research here: <https://workshop.nectric.com.au/isf2025/ethics/explanatory-statement.pdf>
+:::
+
+::: {.callout .fragment}
+## :movie_camera: Recorded workshop
+
+Audio and video from this workshop is being recorded.
+
+The recording will be uploaded to YouTube and shared with you to review the materials. It will **not** be published publicly.
+
+Anonymous transcribed excerpts may be used in our research.
+:::
+
+:::
+:::
+
+![](../backgrounds/martin-adams-_OZCl4XcpRw-unsplash.jpg){.image-right}
 
 ## {}
 
@@ -113,6 +147,8 @@ Time series data and patterns
 ### Welcome, who am I?
 
 - :mortar_board: PhD candidate at Monash University
+
+  This work is part of my research!
 - :bar_chart: Data consulting and workshops at Nectric
 - :chart_with_upwards_trend: Specialised in time series analysis
 - :package: Develops R packages (**fable**, vitae, etc.)
@@ -203,7 +239,8 @@ Install them with:
 # The tidy forecasting packages
 install.packages("fpp3")
 
-# The latest time series analysis packages
+# The latest time series analysis packages which
+# are being actively developed for research and industry
 # (these will be on CRAN soon!)
 remotes::install_github(c(
   "mitchelloharawild/vecvec",
@@ -457,7 +494,7 @@ Then use `as_tsibble()` to convert it into a tsibble.
 #| echo: true
 library(fpp3)
 read.csv(
-  "https://workshop.nectric.com.au/user2024/data/aus_accommodation.csv"
+  "https://workshop.nectric.com.au/isf2025/data/aus_accommodation.csv"
 )
 ```
 
@@ -559,7 +596,7 @@ Let's convert the tourism dataset into a tsibble.
 #| echo: true
 library(fpp3)
 read.csv(
-  "https://workshop.nectric.com.au/user2024/data/tourism.csv"
+  "https://workshop.nectric.com.au/isf2025/data/tourism.csv"
 )
 ```
 
