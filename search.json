@@ -1,5 +1,369 @@
 [
   {
+    "objectID": "slides/seasons/index.html#section",
+    "href": "slides/seasons/index.html#section",
+    "title": "Exploratory time series analysis",
+    "section": "",
+    "text": "Exploratory time series analysis\n\n\nSeasons and calendrical patterns\n\n\n29th June 2025 @ ISF 2025\n\nMitchell O’Hara-Wild, Nectric\n\n\n\n\n\n\n\nUseful links\n\n\n social.mitchelloharawild.com\n workshop.nectric.com.au/isf2025/\n mitchelloharawild/workshop-etsa-isf2025"
+  },
+  {
+    "objectID": "slides/seasons/index.html#section-1",
+    "href": "slides/seasons/index.html#section-1",
+    "title": "Exploratory time series analysis",
+    "section": "",
+    "text": "Visualising temporal patterns\nRecall the time plot allowed us to identify temporal patterns including trend, seasonality, and cycles.\n\npbs_scripts &lt;- PBS |&gt;\n  summarise(Scripts = sum(Scripts))\npbs_scripts |&gt;\n  autoplot(Scripts)"
+  },
+  {
+    "objectID": "slides/seasons/index.html#section-2",
+    "href": "slides/seasons/index.html#section-2",
+    "title": "Exploratory time series analysis",
+    "section": "",
+    "text": "Visualising temporal patterns\nCreating a time plot with autoplot() is quick and easy. A time plot can also be made with ggplot2’s grammar for more options.\n\npbs_scripts |&gt; \n  ggplot(aes(x = Month, y = Scripts)) +\n  geom_line()"
+  },
+  {
+    "objectID": "slides/seasons/index.html#section-3",
+    "href": "slides/seasons/index.html#section-3",
+    "title": "Exploratory time series analysis",
+    "section": "",
+    "text": "Visualising temporal patterns\nThe time plot allows us identify the presence of seasonality, but it is less effective in seeing the shape of seasonal patterns.\n\n\n\n\n\n\n\nQuestion\n\n\nHow else could we represent time to more clearly show annual seasonal patterns?"
+  },
+  {
+    "objectID": "slides/seasons/index.html#section-4",
+    "href": "slides/seasons/index.html#section-4",
+    "title": "Exploratory time series analysis",
+    "section": "",
+    "text": "Visualising seasonality\nAdjusting the plot’s x-axis so that it shows cyclical time (month of year) rather than continuous time (year month) highlights seasonal patterns.\n\n\n\n\n\n\nYour turn\n\n\nTry adjusting the following code to plot month of year along the x-axis.\n\npbs_scripts |&gt; \n  ggplot(aes(x = Month, y = Scripts)) +\n  geom_line()\n\nHint: lubridate::month() and lubridate::year() are useful tools for extracting the month and year from time."
+  },
+  {
+    "objectID": "slides/seasons/index.html#section-5",
+    "href": "slides/seasons/index.html#section-5",
+    "title": "Exploratory time series analysis",
+    "section": "",
+    "text": "Visualising seasonality\n\npbs_scripts |&gt; \n  ggplot(aes(\n    x = month(Month, label = TRUE),\n    y = Scripts, group = year(Month)\n  )) +\n  geom_line() + \n  labs(\"Month of Year\")"
+  },
+  {
+    "objectID": "slides/seasons/index.html#section-6",
+    "href": "slides/seasons/index.html#section-6",
+    "title": "Exploratory time series analysis",
+    "section": "",
+    "text": "Visualising seasonality\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nYour turn\n\n\nDescribe the shape of the seasonal pattern.\nWhen are the most scripts (the peak) and the least scripts (the trough) issued?"
+  },
+  {
+    "objectID": "slides/seasons/index.html#section-7",
+    "href": "slides/seasons/index.html#section-7",
+    "title": "Exploratory time series analysis",
+    "section": "",
+    "text": "The season plot\n\npbs_scripts |&gt; \n  gg_season(Scripts, period = \"1 year\")\n\n\n\n\n\n\n\n\nThis plot is known as a season plot, which can be made quickly with the plot helper function gg_season()."
+  },
+  {
+    "objectID": "slides/seasons/index.html#section-8",
+    "href": "slides/seasons/index.html#section-8",
+    "title": "Exploratory time series analysis",
+    "section": "",
+    "text": "The seasonal period\n\npbs_scripts |&gt; \n  gg_season(Scripts, period = \"1 year\")\n\nThe period argument is a duration for the length of the data’s seasonal pattern.\nIt works by rescaling the x-axis so that it repeats after each year.\nOther common seasonal periods include:\n\n1 week\n1 day\n1 hour"
+  },
+  {
+    "objectID": "slides/seasons/index.html#section-9",
+    "href": "slides/seasons/index.html#section-9",
+    "title": "Exploratory time series analysis",
+    "section": "",
+    "text": "Visualising seasonality\n\nThe aus_production dataset contains the production of Australian Gas in petajoules (among other goods).\n\n\naus_production |&gt; \n  autoplot(Gas)\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nYour turn\n\n\nPlot the shape of the seasonal pattern, in which quarter does Australia produce the most and least gas?"
+  },
+  {
+    "objectID": "slides/seasons/index.html#section-10",
+    "href": "slides/seasons/index.html#section-10",
+    "title": "Exploratory time series analysis",
+    "section": "",
+    "text": "Visualising seasonality\n\naus_production |&gt; \n  gg_season(Gas, period = \"1 year\")\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nDescribing the seasonal pattern\n\n\nThis plot shows that peak production is in Q3 with a trough in Q1. Seasonality is getting stronger recently.\n\n\n\n\n\n\n\n\n\n\n\nCan we do better?\n\n\nIt’s hard to see the seasonality from the early data, how can we improve it?"
+  },
+  {
+    "objectID": "slides/seasons/index.html#section-11",
+    "href": "slides/seasons/index.html#section-11",
+    "title": "Exploratory time series analysis",
+    "section": "",
+    "text": "Visualising seasonality\n\n\naus_production |&gt; \n  gg_season(log(Gas), period = \"1 year\")\n\n\n\n\n\n\n\n\n\n\n\naus_production |&gt; \n  gg_season(Gas, period = \"1 year\") + \n  scale_y_log10()\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nPlotting log transformed data\n\n\nRecall that log transforming the data rescales multiplicative patterns into additive ones.\n\n\n\n\n\n\n\n\n\n\n\n\nCan we do better?\n\n\nThe trend makes it difficult to compare across and within seasons, can we remove the trend?"
+  },
+  {
+    "objectID": "slides/seasons/index.html#section-12",
+    "href": "slides/seasons/index.html#section-12",
+    "title": "Exploratory time series analysis",
+    "section": "",
+    "text": "Visualising seasonality\n\n\naus_production |&gt; \n  model(STL(log(Gas))) |&gt; \n  components() |&gt; \n  autoplot()\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nSTL decomposition\n\n\nRecall that STL allows us to separate trend from seasonality, let’s plot only the seasonal component.\n\n\n\n\n\n\naus_production |&gt; \n  model(STL(log(Gas))) |&gt; \n  components() |&gt; \n  gg_season(season_year, period = \"1 year\")\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nPlotting seasonality from decomposition\n\n\nRemoving the trend and noise allows us to clearly see the seasonal pattern, and even how it changes over time.\n\n\n\n\n\n\n\n\n\n\n\n\nCan we do better?\n\n\nHow can we more clearly see the changes in the seasonal pattern over time?"
+  },
+  {
+    "objectID": "slides/seasons/index.html#section-13",
+    "href": "slides/seasons/index.html#section-13",
+    "title": "Exploratory time series analysis",
+    "section": "",
+    "text": "Visualising seasonality\n\n\n\n\n\n\n\nRemap the aesthetics\n\n\nSwap the x and colour aesthetic mappings to plot the years on the x-axis, with colours for each quarter.\n\n\n\n\n\n\nCode\naus_production |&gt; \n  model(STL(log(Gas))) |&gt; \n  components() |&gt; \n  ggplot(aes(x = year(Quarter), y = season_year, \n             colour = paste0(\"Q\", quarter(Quarter)))) + \n  geom_line() + \n  labs(x = \"Time\", y = \"Seasonality\", colour = \"Quarter\", title = \"Gas production in Australia\")\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nGas production in Q1 is increasing while Q3 is decreasing."
+  },
+  {
+    "objectID": "slides/seasons/index.html#section-14",
+    "href": "slides/seasons/index.html#section-14",
+    "title": "Exploratory time series analysis",
+    "section": "",
+    "text": "Visualising seasonality\n\n\n\n\n\n\n\nRemap the aesthetics\n\n\nSwap the x and colour aesthetic mappings to plot the years on the x-axis, with colours for each quarter.\n\n\n\n\n\n\nCode\naus_production |&gt; \n  model(STL(log(Gas))) |&gt; \n  components() |&gt; \n  ggplot(aes(x = year(Quarter), y = season_year, \n             colour = paste0(\"Q\", quarter(Quarter)))) + \n  geom_line() + \n  labs(x = \"Time\", y = \"Seasonality\", colour = \"Quarter\", title = \"Gas production in Australia\")\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nGas production in Q1 is increasing while Q3 is decreasing."
+  },
+  {
+    "objectID": "slides/seasons/index.html#section-15",
+    "href": "slides/seasons/index.html#section-15",
+    "title": "Exploratory time series analysis",
+    "section": "",
+    "text": "Visualising seasonality\n\n\n\n\n\n\nFacet by season\n\n\nThis produces a ‘seasonal sub-series plot’, which is useful for visualising changes in seasonality over time.\n\n\n\n\n\nCode\naus_production |&gt; \n  model(STL(log(Gas))) |&gt; \n  components() |&gt; \n  ggplot(aes(x = year(Quarter), y = season_year)) + \n  geom_line() + \n  facet_grid(cols = vars(paste0(\"Q\", quarter(Quarter)))) +\n  labs(x = \"Time\", y = \"Seasonality\", title = \"Gas production in Australia\")"
+  },
+  {
+    "objectID": "slides/seasons/index.html#section-16",
+    "href": "slides/seasons/index.html#section-16",
+    "title": "Exploratory time series analysis",
+    "section": "",
+    "text": "The seasonal subseries plot\n\naus_production |&gt; \n  gg_subseries(Gas, period = \"1 year\")\n\n\n\n\n\n\n\n\nThis plot is known as a seasonal subseries plot, which can be made quickly with the plot helper function gg_subseries()."
+  },
+  {
+    "objectID": "slides/seasons/index.html#section-17",
+    "href": "slides/seasons/index.html#section-17",
+    "title": "Exploratory time series analysis",
+    "section": "",
+    "text": "The seasonal subseries plot\n\n\n\n\n\n\nSeasonal decomposition advised\n\n\nSeeing changes in seasonality when the data has trend, noise, and other patterns is tricky! This plot works best in combination with STL decomposition.\n\n\n\n\naus_production |&gt; \n  model(STL(log(Gas))) |&gt; \n  components() |&gt; \n  gg_subseries(season_year, period = \"1 year\")"
+  },
+  {
+    "objectID": "slides/seasons/index.html#section-18",
+    "href": "slides/seasons/index.html#section-18",
+    "title": "Exploratory time series analysis",
+    "section": "",
+    "text": "Changing seasonality\n\n\n\n\n\n\nYour turn!\n\n\nIs the seasonal pattern in the total subsidised prescriptions (Scripts) in Australia changing over time?\n\n\n\n\npbs_scripts &lt;- PBS |&gt;\n  summarise(Scripts = sum(Scripts))\npbs_scripts |&gt;\n  autoplot(Scripts)"
+  },
+  {
+    "objectID": "slides/seasons/index.html#section-19",
+    "href": "slides/seasons/index.html#section-19",
+    "title": "Exploratory time series analysis",
+    "section": "",
+    "text": "Changing seasonality\n\npbs_scripts |&gt; \n  model(STL(Scripts)) |&gt; \n  components() |&gt; \n  gg_subseries(season_year, period = \"1 year\")\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nThe number of scripts in December is dropping rapidly.\nThey appear to be redistributed into Oct, Nov, and Jan."
+  },
+  {
+    "objectID": "slides/seasons/index.html#section-20",
+    "href": "slides/seasons/index.html#section-20",
+    "title": "Exploratory time series analysis",
+    "section": "",
+    "text": "Recap of plotting time series\n\nTime plots\nSeason plots\nSeasonal subseries plots"
+  },
+  {
+    "objectID": "slides/seasons/index.html#section-21",
+    "href": "slides/seasons/index.html#section-21",
+    "title": "Exploratory time series analysis",
+    "section": "",
+    "text": "Complex seasonality\nComplex seasonality describes two or more seasonal patterns.\nComplex seasonal patterns:\n\noften interact with each-other\ncan be based on other calendars (e.g. holidays)\n\n\n\n\n\n\n\n\nFrequent seasonality\n\n\nMultiple seasonality is common in daily & sub-daily data.\nIt can be difficult to forecast, so first consider if you need daily or sub-daily forecasts for making decisions."
+  },
+  {
+    "objectID": "slides/seasons/index.html#section-22",
+    "href": "slides/seasons/index.html#section-22",
+    "title": "Exploratory time series analysis",
+    "section": "",
+    "text": "Victorian electricity demand\n\nVideo"
+  },
+  {
+    "objectID": "slides/seasons/index.html#section-23",
+    "href": "slides/seasons/index.html#section-23",
+    "title": "Exploratory time series analysis",
+    "section": "",
+    "text": "Victorian electricity demand\n\nVideo"
+  },
+  {
+    "objectID": "slides/seasons/index.html#section-24",
+    "href": "slides/seasons/index.html#section-24",
+    "title": "Exploratory time series analysis",
+    "section": "",
+    "text": "Victorian electricity demand\n\nVideo"
+  },
+  {
+    "objectID": "slides/seasons/index.html#section-25",
+    "href": "slides/seasons/index.html#section-25",
+    "title": "Exploratory time series analysis",
+    "section": "",
+    "text": "Victorian electricity demand\n\nVideo"
+  },
+  {
+    "objectID": "slides/seasons/index.html#section-26",
+    "href": "slides/seasons/index.html#section-26",
+    "title": "Exploratory time series analysis",
+    "section": "",
+    "text": "Complex seasonality\nThere are two key strategies for clearly plotting multiple seasonal patterns:\n\n\n\n\n\n\n\nTemporal aggregation\n\n\nAggregate time into coarser frequencies to sum over finer-grained seasonal patterns.\nThis is useful for plotting annual seasonality\n\n\n\n\n\n\n\n\n\n\n\nSeasonal decomposition\n\n\nSeparate each of the seasonal patterns using MSTL (multiple seasonal trend by loess) decomposition.\nThis is best for daily / weekly seasonality"
+  },
+  {
+    "objectID": "slides/seasons/index.html#section-27",
+    "href": "slides/seasons/index.html#section-27",
+    "title": "Exploratory time series analysis",
+    "section": "",
+    "text": "Temporal aggregation\nThe Victorian electricity demand data has three seasonal patterns:\n\nAnnual (weather)\nWeekly (work)\nDaily (sleep)\n\nThe original data has a 30 minute frequency.\n\nvic_elec\n\n# A tsibble: 52,608 x 5 [30m] &lt;Australia/Melbourne&gt;\n   Time                Demand Temperature Date       Holiday\n   &lt;dttm&gt;               &lt;dbl&gt;       &lt;dbl&gt; &lt;date&gt;     &lt;lgl&gt;  \n 1 2012-01-01 00:00:00  4383.        21.4 2012-01-01 TRUE   \n 2 2012-01-01 00:30:00  4263.        21.0 2012-01-01 TRUE   \n 3 2012-01-01 01:00:00  4049.        20.7 2012-01-01 TRUE   \n 4 2012-01-01 01:30:00  3878.        20.6 2012-01-01 TRUE   \n 5 2012-01-01 02:00:00  4036.        20.4 2012-01-01 TRUE   \n 6 2012-01-01 02:30:00  3866.        20.2 2012-01-01 TRUE   \n 7 2012-01-01 03:00:00  3694.        20.1 2012-01-01 TRUE   \n 8 2012-01-01 03:30:00  3562.        19.6 2012-01-01 TRUE   \n 9 2012-01-01 04:00:00  3433.        19.1 2012-01-01 TRUE   \n10 2012-01-01 04:30:00  3359.        19.0 2012-01-01 TRUE   \n# ℹ 52,598 more rows"
+  },
+  {
+    "objectID": "slides/seasons/index.html#section-28",
+    "href": "slides/seasons/index.html#section-28",
+    "title": "Exploratory time series analysis",
+    "section": "",
+    "text": "Temporal aggregation\nWhen plotted at a 30 minute frequency, it is difficult to see any seasonal pattern clearly.\n\nvic_elec |&gt; \n  autoplot(Demand)"
+  },
+  {
+    "objectID": "slides/seasons/index.html#section-29",
+    "href": "slides/seasons/index.html#section-29",
+    "title": "Exploratory time series analysis",
+    "section": "",
+    "text": "Temporal aggregation\n\nAggregation to a weekly frequency will sum over the daily and weekly patterns.\n\n\nvic_elec |&gt; \n  index_by(Week = yearweek(Time)) |&gt; \n  summarise(Demand = sum(Demand)) |&gt; \n  autoplot(Demand)\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nPartial aggregation\n\n\nWhen aggregating time, you need to ensure the aggregation window has all necessary data."
+  },
+  {
+    "objectID": "slides/seasons/index.html#section-30",
+    "href": "slides/seasons/index.html#section-30",
+    "title": "Exploratory time series analysis",
+    "section": "",
+    "text": "Temporal aggregation\n\nvic_elec |&gt; \n  index_by(Week = yearweek(Time)) |&gt; \n  summarise(Demand = sum(Demand), n = length(Week)) |&gt;\n  filter(n &gt;= 2*24*7 - 2) |&gt; \n  autoplot(Demand)"
+  },
+  {
+    "objectID": "slides/seasons/index.html#section-31",
+    "href": "slides/seasons/index.html#section-31",
+    "title": "Exploratory time series analysis",
+    "section": "",
+    "text": "Temporal aggregation\n\nvic_elec |&gt; \n  index_by(Week = yearweek(Date)) |&gt; \n  summarise(Demand = sum(Demand), n = length(Week)) |&gt;\n  filter(n &gt;= 2*24*7 - 2) |&gt;\n  gg_season(Demand, period = \"1 year\")"
+  },
+  {
+    "objectID": "slides/seasons/index.html#section-32",
+    "href": "slides/seasons/index.html#section-32",
+    "title": "Exploratory time series analysis",
+    "section": "",
+    "text": "Temporal aggregation\nThe pedestrian dataset contains the hourly number of pedestrians at various places in Melbourne, Australia.\n\npedestrian |&gt; \n  filter(Sensor == \"Southern Cross Station\") |&gt; \n  autoplot(Count)"
+  },
+  {
+    "objectID": "slides/seasons/index.html#section-33",
+    "href": "slides/seasons/index.html#section-33",
+    "title": "Exploratory time series analysis",
+    "section": "",
+    "text": "Temporal aggregation\n\npedestrian |&gt; \n  filter(Sensor == \"Southern Cross Station\") |&gt; \n  index_by(Week = yearweek(Date_Time)) |&gt;\n  summarise(Count = sum(Count), n = length(Week)) |&gt; \n  filter(n &gt;= 24*7 - 1) |&gt; \n  fill_gaps() |&gt; \n  gg_season(Count, period = \"1 year\")"
+  },
+  {
+    "objectID": "slides/seasons/index.html#section-34",
+    "href": "slides/seasons/index.html#section-34",
+    "title": "Exploratory time series analysis",
+    "section": "",
+    "text": "Temporal aggregation\nSince there doesn’t appear to be (substantial) annual seasonality, we can use aggregation to look for weekly seasonality.\n\n\n\n\n\n\nYour turn!\n\n\nUse the Date column with index_by() to aggregate to daily data, then use gg_season() to plot the weekly seasonal pattern.\nHere’s some code to start:\n\npedestrian |&gt; \n  filter(Sensor == \"Southern Cross Station\") |&gt; \n  index_by(???) |&gt;\n  summarise(Count = sum(Count))\n  gg_season(???)"
+  },
+  {
+    "objectID": "slides/seasons/index.html#section-35",
+    "href": "slides/seasons/index.html#section-35",
+    "title": "Exploratory time series analysis",
+    "section": "",
+    "text": "Temporal aggregation\n\npedestrian |&gt; \n  filter(Sensor == \"Southern Cross Station\") |&gt; \n  index_by(Date) |&gt;\n  summarise(Count = sum(Count)) |&gt; \n  gg_season(Count, period = \"1 week\")"
+  },
+  {
+    "objectID": "slides/seasons/index.html#section-36",
+    "href": "slides/seasons/index.html#section-36",
+    "title": "Exploratory time series analysis",
+    "section": "",
+    "text": "Seasonal decomposition\nThe STL model can also decompose multiple seasonalities.\n\ndcmp &lt;- vic_elec |&gt; \n  model(STL(log(Demand) ~ season(period = \"year\") +\n              season(period = \"week\") + season(period = \"day\"))) |&gt; \n  components()\ndcmp |&gt; \n  autoplot()"
+  },
+  {
+    "objectID": "slides/seasons/index.html#section-37",
+    "href": "slides/seasons/index.html#section-37",
+    "title": "Exploratory time series analysis",
+    "section": "",
+    "text": "Seasonal decomposition\nThis is effective in combination with season plots to show seasonal patterns.\n\ndcmp |&gt; \n  gg_season(season_year, period = \"1 year\")"
+  },
+  {
+    "objectID": "slides/seasons/index.html#section-38",
+    "href": "slides/seasons/index.html#section-38",
+    "title": "Exploratory time series analysis",
+    "section": "",
+    "text": "Seasonal decomposition\nThis is effective in combination with season plots to show seasonal patterns.\n\ndcmp |&gt; \n  gg_season(season_week, period = \"1 week\")"
+  },
+  {
+    "objectID": "slides/seasons/index.html#section-39",
+    "href": "slides/seasons/index.html#section-39",
+    "title": "Exploratory time series analysis",
+    "section": "",
+    "text": "Seasonal decomposition\nThis is effective in combination with season plots to show seasonal patterns.\n\ndcmp |&gt; \n  gg_season(season_day, period = \"1 day\")"
+  },
+  {
+    "objectID": "slides/seasons/index.html#section-40",
+    "href": "slides/seasons/index.html#section-40",
+    "title": "Exploratory time series analysis",
+    "section": "",
+    "text": "Seasonal decomposition\nSpecific combinations of seasonal patterns can also be computed and plotted.\n\n\ndcmp |&gt; \n  gg_season(season_day + season_week, \n            period = \"1 week\")\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nCaution: model limitations\n\n\nRecall the STL decomposition is additive, so interactions between different seasonality will not be captured. The seasonal components are only as accurate as the model."
+  },
+  {
+    "objectID": "slides/seasons/index.html#section-41",
+    "href": "slides/seasons/index.html#section-41",
+    "title": "Exploratory time series analysis",
+    "section": "",
+    "text": "Seasonal decomposition\n\n\n\n\n\n\nYour turn!\n\n\nUse an STL decomposition and gg_season() to clearly show the seasonal patterns in pedestrian traffic.\n\nped_dcmp &lt;- pedestrian |&gt; \n  filter(Sensor == \"Southern Cross Station\") |&gt; \n  fill_gaps(Count = 0) |&gt; \n  model(STL(Count)) |&gt; \n  components()\nped_dcmp |&gt; \n  autoplot()"
+  },
+  {
+    "objectID": "slides/seasons/index.html#section-42",
+    "href": "slides/seasons/index.html#section-42",
+    "title": "Exploratory time series analysis",
+    "section": "",
+    "text": "Seasonal decomposition\n\nped_dcmp |&gt; \n  gg_season(season_year, period = \"1 year\")"
+  },
+  {
+    "objectID": "slides/seasons/index.html#section-43",
+    "href": "slides/seasons/index.html#section-43",
+    "title": "Exploratory time series analysis",
+    "section": "",
+    "text": "Seasonal decomposition\n\nped_dcmp |&gt; \n  gg_season(season_week, period = \"1 week\")\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nInteraction effects\n\n\nThe weekly seasonal pattern interacts with the daily seasonal pattern, so the model doesn’t work here."
+  },
+  {
+    "objectID": "slides/seasons/index.html#section-44",
+    "href": "slides/seasons/index.html#section-44",
+    "title": "Exploratory time series analysis",
+    "section": "",
+    "text": "Seasonal decomposition\n\nped_dcmp |&gt; \n  gg_season(season_day, period = \"1 day\")\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nInteraction effects\n\n\nThe weekly seasonal pattern interacts with the daily seasonal pattern, so the model doesn’t work here."
+  },
+  {
+    "objectID": "slides/seasons/index.html#section-45",
+    "href": "slides/seasons/index.html#section-45",
+    "title": "Exploratory time series analysis",
+    "section": "",
+    "text": "Seasonal decomposition\n\n\n\n\n\n\nInteraction effects\n\n\nCombine interacting seasonalities and use facets to separate the interactions (e.g. weekday and weekend effects).\n\n\n\n\n\nped_dcmp |&gt; \n  mutate(Weekday = wday(Date_Time, week_start = 1) %in% 1:5) |&gt; \n  gg_season(season_day + season_week, period = \"1 day\") + \n  facet_wrap(vars(Weekday))"
+  },
+  {
+    "objectID": "slides/seasons/index.html#section-46",
+    "href": "slides/seasons/index.html#section-46",
+    "title": "Exploratory time series analysis",
+    "section": "",
+    "text": "Calendar plots\nUsing calendar layouts for time plots helps to visualise a large number of frequent (sub-daily) observations.\nThis is especially useful to show calendar specific patterns such as holidays.\n\nlibrary(sugrrants)\nvic_elec |&gt; \n  filter(Time &lt; as.Date(\"2012-05-01\")) |&gt; \n  ggplot(aes(x = hms::as_hms(Time), y = Demand)) + \n  geom_line() + \n  facet_calendar(~ Date, nrow = 2)"
+  },
+  {
+    "objectID": "slides/seasons/index.html#section-48",
+    "href": "slides/seasons/index.html#section-48",
+    "title": "Exploratory time series analysis",
+    "section": "",
+    "text": "Calendar plots\n\n\n\n\n\n\nYour turn!\n\n\nCreate a calendar plot for the first few months of pedestrians at Southern Cross Station.\nHere’s some code to get you started.\n\npedestrian |&gt; \n  filter(Sensor == \"Southern Cross Station\") |&gt; \n  filter(Date_Time &lt; as.Date(???)) |&gt; \n  ggplot(aes(x = hms::as_hms(???), y = ???)) + \n  geom_line() + \n  facet_???(???)\n\nCan you see any holiday effects?"
+  },
+  {
+    "objectID": "slides/seasons/index.html#section-49",
+    "href": "slides/seasons/index.html#section-49",
+    "title": "Exploratory time series analysis",
+    "section": "",
+    "text": "Code\npedestrian |&gt; \n  filter(Sensor == \"Southern Cross Station\") |&gt; \n  filter(Date_Time &lt; as.Date(\"2015-05-01\")) |&gt; \n  ggplot(aes(x = hms::as_hms(Date_Time), y = Count)) + \n  geom_line() + \n  scale_x_time(breaks = c(9, 17), labels = c(\"9AM\", \"5PM\")) +\n  facet_calendar(~ Date) + \n  labs(x = \"Time\", y = \"Pedestrian count\")"
+  },
+  {
+    "objectID": "slides/seasons/index.html#section-50",
+    "href": "slides/seasons/index.html#section-50",
+    "title": "Exploratory time series analysis",
+    "section": "",
+    "text": "🎓 User-study\n\n\nWe would greatly appreciate if you complete this user study form for to help improve the ggtime package design.\nYou can find the explanatory statement for this research here: https://workshop.nectric.com.au/isf2025/ethics/explanatory-statement.pdf\n\nYou can join my WiFi hotspot if you cannot access Google:\n\nSSID: IIF-ETSA\nPASSWORD: 1234567890"
+  },
+  {
+    "objectID": "slides/seasons/index.html#thats-all-we-have-time-for",
+    "href": "slides/seasons/index.html#thats-all-we-have-time-for",
+    "title": "Exploratory time series analysis",
+    "section": "That’s all we have time for!",
+    "text": "That’s all we have time for!\n\n\n\n\n\n\n\n\nLearn more about forecasting\n\n\n\nForecasting principles and practices textbook\n\nFreely available online! https://otexts.com/fpp3/\n\n\n\n\n\n\n\n\n\nI appreciate your feedback\n\n\nShort feedback form: https://feedback.nectric.com.au/w0rw\n\n\n\n\n\n\n\n\n\n\nUseful links\n\n\n social.mitchelloharawild.com\n workshop.nectric.com.au/isf2025/\n mitchelloharawild/workshop-etsa-isf2025"
+  },
+  {
+    "objectID": "slides/seasons/index.html#unsplash-credits",
+    "href": "slides/seasons/index.html#unsplash-credits",
+    "title": "Exploratory time series analysis",
+    "section": "Unsplash credits",
+    "text": "Unsplash credits\n\n\n\n\n\n\n\nThanks to these Unsplash contributors for their photos\n\n\n\n\n\nSander Weeteling: Photo\nKasia Gajek: Photo\nNASA: United States seen from orbit\nBalint Mendlik: Photo\nSander Weeteling: Photo"
+  },
+  {
     "objectID": "license.html",
     "href": "license.html",
     "title": "License",
@@ -53,6 +417,370 @@
     "href": "index.html#required-software",
     "title": "Exploratory time series analysis",
     "section": "Required software",
-    "text": "Required software\nTo be able to complete the exercises of this workshop, please install a suitable IDE (such as RStudio), a recent version of R (4.1+) and the following packages.\n\nTime series packages and extensions\n\nfpp3\n\n\nThe following code will install the main packages needed for the workshop.\ninstall.packages(c(\"fpp3\"))\nPlease have the required software installed and pre-work completed before attending the workshop."
+    "text": "Required software\nTo be able to complete the exercises of this workshop, please install a suitable IDE (such as RStudio), a recent version of R (4.1+) and the following packages.\n\nTime series packages and extensions\n\nfpp3\nsugrrants\n\n\nThe following code will install the main packages needed for the workshop.\ninstall.packages(c(\"fpp3\", \"sugrrants\"))\nPlease have the required software installed and pre-work completed before attending the workshop."
+  },
+  {
+    "objectID": "slides/patterns/index.html#section",
+    "href": "slides/patterns/index.html#section",
+    "title": "Exploratory time series analysis",
+    "section": "",
+    "text": "Exploratory time series analysis\n\n\nTime series data and patterns\n\n\n29th June 2025 @ ISF 2025\n\nMitchell O’Hara-Wild, Nectric\n\n\n\n\n\n\n\nUseful links\n\n\n social.mitchelloharawild.com\n workshop.nectric.com.au/isf2025/\n mitchelloharawild/workshop-etsa-isf2025"
+  },
+  {
+    "objectID": "slides/patterns/index.html#section-1",
+    "href": "slides/patterns/index.html#section-1",
+    "title": "Exploratory time series analysis",
+    "section": "",
+    "text": "🎯 Today’s goals\n\n\n\nLearn about tidy time series data.\nWrangle and summarise time series data.\nUse temporal features to find patterns in many series.\nExplore complex seasonalities and holiday patterns.\n\n\n\n\n\n\n\n\n🌻 Expectations\n\n\n\nFollow the code of conduct.\nBe kind and respectful.\nAsk relevant questions any time, Q&A during breaks.\nMake mistakes and learn!\n\n\n\n\n\nhttps://workshop.nectric.com.au/isf2025/"
+  },
+  {
+    "objectID": "slides/patterns/index.html#section-2",
+    "href": "slides/patterns/index.html#section-2",
+    "title": "Exploratory time series analysis",
+    "section": "",
+    "text": "🎓 Active research\n\n\nSome of the content in this workshop is active research.\nWe want to make time series data visualisation easier, and are creating new R packages and conceptual frameworks for visualising time with calendars.\nAnonymous responses to polls, the end-of-class survey, and workshop discussions will be collected for research purposes.\nYou can find the explanatory statement for this research here: https://workshop.nectric.com.au/isf2025/ethics/explanatory-statement.pdf\n\n\n\n\n\n\n\n🎥 Recorded workshop\n\n\nAudio and video from this workshop is being recorded.\nThe recording will be uploaded to YouTube and shared with you to review the materials. It will not be published publicly.\nAnonymous transcribed excerpts may be used in our research."
+  },
+  {
+    "objectID": "slides/patterns/index.html#section-3",
+    "href": "slides/patterns/index.html#section-3",
+    "title": "Exploratory time series analysis",
+    "section": "",
+    "text": "Mitchell O’Hara‑Wild\nMonash + Nectric\n @mitchelloharawild\n @mitchelloharawild\n\nWelcome, who am I?\n\n🎓 PhD candidate at Monash University\nThis work is part of my research!\n📊 Data consulting and workshops at Nectric\n📈 Specialised in time series analysis\n📦 Develops R packages (fable, vitae, etc.)\n🤖 DIYs IoT devices for home automation\n🌱 Permaculturist (🐝, 🐣, 🍄, 🌞)"
+  },
+  {
+    "objectID": "slides/patterns/index.html#section-4",
+    "href": "slides/patterns/index.html#section-4",
+    "title": "Exploratory time series analysis",
+    "section": "",
+    "text": "You!\nISF attendee\n\n🙋 Hi, who are you?\nHands up if…\n\n🧑‍💻 You’ve used R\n📊 You’ve analysed data\n🫧 Used tidyverse packages (dplyr, ggplot2…)\n📈 You’ve worked with time series data before\n🖼️ You’ve created standard time series plots\n🎨 You’ve made custom time series graphics"
+  },
+  {
+    "objectID": "slides/patterns/index.html#section-5",
+    "href": "slides/patterns/index.html#section-5",
+    "title": "Exploratory time series analysis",
+    "section": "",
+    "text": "Tidy time series analysis\nThis workshop is about tidy time series in R.\n\nWe’ll be using these packages!"
+  },
+  {
+    "objectID": "slides/patterns/index.html#section-6",
+    "href": "slides/patterns/index.html#section-6",
+    "title": "Exploratory time series analysis",
+    "section": "",
+    "text": "Tidy time series packages\nThis workshop is about tidy time series in R.\nInstall them with:\n\n# The tidy forecasting packages\ninstall.packages(\"fpp3\")\n\n# Calendar visualisation layouts\ninstall.packages(\"sugrrants\")"
+  },
+  {
+    "objectID": "slides/patterns/index.html#section-7",
+    "href": "slides/patterns/index.html#section-7",
+    "title": "Exploratory time series analysis",
+    "section": "",
+    "text": "Tidy time series packages\n# Data manipulation\nlibrary(dplyr)\n# Plotting functions\nlibrary(ggplot2)\n# Manipulate time\nlibrary(lubridate)\n# Time series class\nlibrary(tsibble)\n# Tidy time series datasets\nlibrary(tsibbledata)\n# Feature extraction and statistics\nlibrary(feasts)\n# Time series calendar graphics\nlibrary(sugrrants)\n\n\n# All of the above\nlibrary(fpp3)\nlibrary(sugrrants)"
+  },
+  {
+    "objectID": "slides/patterns/index.html#section-8",
+    "href": "slides/patterns/index.html#section-8",
+    "title": "Exploratory time series analysis",
+    "section": "",
+    "text": "Time series data\n\nFour-yearly Olympic winning times\nAnnual Google profits\nQuarterly Australian beer production\nMonthly pharmaceutical subsidies\nWeekly retail sales\nDaily COVID-19 infections\nHourly electricity demand\nMinutely blood glucose measurements\nTime-stamped stock transaction data"
+  },
+  {
+    "objectID": "slides/patterns/index.html#section-9",
+    "href": "slides/patterns/index.html#section-9",
+    "title": "Exploratory time series analysis",
+    "section": "",
+    "text": "Time series data\nComes in all shapes and sizes!\nLike all data, we hope it’s tidy 🧹\n\n\n\n\n\n\n\nAll time series data contain…\n\n\n\nThe time of the observation (index)\nOne or more observations (measurements)\n\n\nSome datasets have identifying metadata,\n\nIdentifying variables for the series (key)"
+  },
+  {
+    "objectID": "slides/patterns/index.html#section-10",
+    "href": "slides/patterns/index.html#section-10",
+    "title": "Exploratory time series analysis",
+    "section": "",
+    "text": "The tsibble data format\n\nA tsibble is a tibble for time series!\nThe quarterly visitors to Australia are found in the tourism dataset.\n\nlibrary(fpp3)\ntourism\n\n# A tsibble: 24,320 x 5 [1Q]\n# Key:       Region, State, Purpose [304]\n   Quarter Region   State           Purpose  Trips\n     &lt;qtr&gt; &lt;chr&gt;    &lt;chr&gt;           &lt;chr&gt;    &lt;dbl&gt;\n 1 1998 Q1 Adelaide South Australia Business  135.\n 2 1998 Q2 Adelaide South Australia Business  110.\n 3 1998 Q3 Adelaide South Australia Business  166.\n 4 1998 Q4 Adelaide South Australia Business  127.\n 5 1999 Q1 Adelaide South Australia Business  137.\n 6 1999 Q2 Adelaide South Australia Business  200.\n 7 1999 Q3 Adelaide South Australia Business  169.\n 8 1999 Q4 Adelaide South Australia Business  134.\n 9 2000 Q1 Adelaide South Australia Business  154.\n10 2000 Q2 Adelaide South Australia Business  169.\n# ℹ 24,310 more rows"
+  },
+  {
+    "objectID": "slides/patterns/index.html#section-11",
+    "href": "slides/patterns/index.html#section-11",
+    "title": "Exploratory time series analysis",
+    "section": "",
+    "text": "# A tibble: 24,320 × 5\n   Quarter Region   State           Purpose  Trips\n     &lt;qtr&gt; &lt;chr&gt;    &lt;chr&gt;           &lt;chr&gt;    &lt;dbl&gt;\n 1 1998 Q1 Adelaide South Australia Business  135.\n 2 1998 Q2 Adelaide South Australia Business  110.\n 3 1998 Q3 Adelaide South Australia Business  166.\n 4 1998 Q4 Adelaide South Australia Business  127.\n 5 1999 Q1 Adelaide South Australia Business  137.\n 6 1999 Q2 Adelaide South Australia Business  200.\n 7 1999 Q3 Adelaide South Australia Business  169.\n 8 1999 Q4 Adelaide South Australia Business  134.\n 9 2000 Q1 Adelaide South Australia Business  154.\n10 2000 Q2 Adelaide South Australia Business  169.\n# ℹ 24,310 more rows\n\n\n\n\n\n\n\n\nColumn types\n\n\nIn this dataset, the column types are:\n\nindex variable: Quarter\nkey variable(s): Region, State, and Purpose\nmeasured variable(s): Trips"
+  },
+  {
+    "objectID": "slides/patterns/index.html#section-12",
+    "href": "slides/patterns/index.html#section-12",
+    "title": "Exploratory time series analysis",
+    "section": "",
+    "text": "pedestrian\n\n\n\n# A tibble: 66,037 × 5\n   Sensor         Date_Time           Date        Time Count\n   &lt;chr&gt;          &lt;dttm&gt;              &lt;date&gt;     &lt;int&gt; &lt;int&gt;\n 1 Birrarung Marr 2015-01-01 00:00:00 2015-01-01     0  1630\n 2 Birrarung Marr 2015-01-01 01:00:00 2015-01-01     1   826\n 3 Birrarung Marr 2015-01-01 02:00:00 2015-01-01     2   567\n 4 Birrarung Marr 2015-01-01 03:00:00 2015-01-01     3   264\n 5 Birrarung Marr 2015-01-01 04:00:00 2015-01-01     4   139\n 6 Birrarung Marr 2015-01-01 05:00:00 2015-01-01     5    77\n 7 Birrarung Marr 2015-01-01 06:00:00 2015-01-01     6    44\n 8 Birrarung Marr 2015-01-01 07:00:00 2015-01-01     7    56\n 9 Birrarung Marr 2015-01-01 08:00:00 2015-01-01     8   113\n10 Birrarung Marr 2015-01-01 09:00:00 2015-01-01     9   166\n# ℹ 66,027 more rows\n\n\n\n\n\n\n\n\nExercise 1\n\n\nIn this dataset, which columns are:\n\nindex variable(s)?\nkey variable(s)?\nmeasured variable(s)?"
+  },
+  {
+    "objectID": "slides/patterns/index.html#section-13",
+    "href": "slides/patterns/index.html#section-13",
+    "title": "Exploratory time series analysis",
+    "section": "",
+    "text": "Our first tsibble\nA tsibble is a time series tibble.\nIt is created with as_tsibble().\n\ntourism |&gt; \n  as_tsibble(\n    key = c(Region, State, Purpose),\n    index = Quarter\n  )\n\n# A tsibble: 24,320 x 5 [1Q]\n# Key:       Region, State, Purpose [304]\n   Quarter Region   State           Purpose  Trips\n     &lt;qtr&gt; &lt;chr&gt;    &lt;chr&gt;           &lt;chr&gt;    &lt;dbl&gt;\n 1 1998 Q1 Adelaide South Australia Business  135.\n 2 1998 Q2 Adelaide South Australia Business  110.\n 3 1998 Q3 Adelaide South Australia Business  166.\n 4 1998 Q4 Adelaide South Australia Business  127.\n 5 1999 Q1 Adelaide South Australia Business  137.\n 6 1999 Q2 Adelaide South Australia Business  200.\n 7 1999 Q3 Adelaide South Australia Business  169.\n 8 1999 Q4 Adelaide South Australia Business  134.\n 9 2000 Q1 Adelaide South Australia Business  154.\n10 2000 Q2 Adelaide South Australia Business  169.\n# ℹ 24,310 more rows"
+  },
+  {
+    "objectID": "slides/patterns/index.html#section-14",
+    "href": "slides/patterns/index.html#section-14",
+    "title": "Exploratory time series analysis",
+    "section": "",
+    "text": "Our first tsibble\n\n\n\n\n\n\nExercise 2\n\n\nIdentify the index and key variables of the aus_accommodation dataset.\nThen use as_tsibble() to convert it into a tsibble.\n\nlibrary(fpp3)\nread.csv(\n  \"https://workshop.nectric.com.au/isf2025/data/aus_accommodation.csv\"\n)"
+  },
+  {
+    "objectID": "slides/patterns/index.html#section-15",
+    "href": "slides/patterns/index.html#section-15",
+    "title": "Exploratory time series analysis",
+    "section": "",
+    "text": "Representing time indices\n\nTime is surprisingly tricky to represent!\n\nfrequency\ngranularity\ntime zones\ncalendars\nleap years (and seconds?!)\nholidays\ncivil/absolute time\ntime periods"
+  },
+  {
+    "objectID": "slides/patterns/index.html#section-16",
+    "href": "slides/patterns/index.html#section-16",
+    "title": "Exploratory time series analysis",
+    "section": "",
+    "text": "Representing time indices\n\nCommon time points can be created with these functions:\n\n\n\n\n\nGranularity\nFunction\n\n\n\n\nAnnual\nstart:end\n\n\nQuarterly\nyearquarter()\n\n\nMonthly\nyearmonth()\n\n\nWeekly\nyearweek()\n\n\nDaily\nas_date(), ymd()\n\n\nSub-daily\nas_datetime()"
+  },
+  {
+    "objectID": "slides/patterns/index.html#section-17",
+    "href": "slides/patterns/index.html#section-17",
+    "title": "Exploratory time series analysis",
+    "section": "",
+    "text": "Creating a tsibble\n\nTidy the data into a long format\nAppropriately class the time variable\nConvert to tsibble with as_tibble(), identifying the index and key variable(s).\n\n\n\n\n\n\n\nFollow along\n\n\nLet’s convert the tourism dataset into a tsibble.\n\nlibrary(fpp3)\nread.csv(\n  \"https://workshop.nectric.com.au/isf2025/data/tourism.csv\"\n)"
+  },
+  {
+    "objectID": "slides/patterns/index.html#section-18",
+    "href": "slides/patterns/index.html#section-18",
+    "title": "Exploratory time series analysis",
+    "section": "",
+    "text": "Creating a tsibble\n\nTidy the data into a long format\nAppropriately class the time variable\nConvert to tsibble with as_tibble(), identifying the index and key variable(s).\n\n\n\n\n\n\n\nExercise 3\n\n\nRedo the previous exercise, but this time use the appropriate time class for the index variable.\nYou should see the frequency of the tsibble matches the quarterly frequency of the measurements."
+  },
+  {
+    "objectID": "slides/patterns/index.html#section-19",
+    "href": "slides/patterns/index.html#section-19",
+    "title": "Exploratory time series analysis",
+    "section": "",
+    "text": "Manipulating time series data\nTidy time series data uses tidyverse tools!\n\n\n\n\n\n\nExercise 4\n\n\nTry calculating the total tourists visiting Victoria from the tourism dataset.\nHint: use filter() to keep only visitors to “Victoria”, then summarise() to calculate the total trips."
+  },
+  {
+    "objectID": "slides/patterns/index.html#section-20",
+    "href": "slides/patterns/index.html#section-20",
+    "title": "Exploratory time series analysis",
+    "section": "",
+    "text": "Manipulating time series data\nHowever there are some differences when working with time…\nThe time index is always preserved (implicit group_by()).\n\n\n\n\n\n\nGrouping across time\n\n\nSometimes you want to summarise over time.\nSummarising over all of time is no longer a time series, so first convert to a tibble with as_tibble().\nTo re-index by a new variable, use index_by()."
+  },
+  {
+    "objectID": "slides/patterns/index.html#section-21",
+    "href": "slides/patterns/index.html#section-21",
+    "title": "Exploratory time series analysis",
+    "section": "",
+    "text": "Visualising time series\nTime series visualisation helps us identify time series patterns.\nThese patterns include:\n\ntrends\nseasonalities\ncycles\ncovariates\nevents\n\nThey also help identify anomalies/outliers.\n\n:::"
+  },
+  {
+    "objectID": "slides/patterns/index.html#section-22",
+    "href": "slides/patterns/index.html#section-22",
+    "title": "Exploratory time series analysis",
+    "section": "",
+    "text": "Time plots\nThe most common time series graphic is the “time plot”, created with autoplot().\n\npbs_scripts &lt;- PBS |&gt;\n  summarise(Scripts = sum(Scripts))\npbs_scripts |&gt;\n  autoplot(Scripts)"
+  },
+  {
+    "objectID": "slides/patterns/index.html#section-23",
+    "href": "slides/patterns/index.html#section-23",
+    "title": "Exploratory time series analysis",
+    "section": "",
+    "text": "ACF plots\nAn ACF plot shows autocorrelations (lagged relationships). This helps to identify trends, seasons and cycles.\n\npbs_scripts |&gt;\n  ACF(Scripts) |&gt; \n  autoplot()"
+  },
+  {
+    "objectID": "slides/patterns/index.html#section-24",
+    "href": "slides/patterns/index.html#section-24",
+    "title": "Exploratory time series analysis",
+    "section": "",
+    "text": "Visualising time series\n\n\n\n\n\n\nExercise 5\n\n\nVisualise and describe the temporal patterns of visitors to Victoria in the tourism dataset.\nHere’s some code to get you started:\n\nvic_tourism &lt;- tourism |&gt; \n  filter(State == \"Victoria\") |&gt; \n  summarise(Trips = sum(Trips))\nvic_tourism |&gt; \n  autoplot(Trips)"
+  },
+  {
+    "objectID": "slides/patterns/index.html#section-25",
+    "href": "slides/patterns/index.html#section-25",
+    "title": "Exploratory time series analysis",
+    "section": "",
+    "text": "Seasonal or Cyclical?\nThese common patterns are commonly confused, can you tell them apart?\n\n\n\n\n\n\nWhat’s the difference?\n\n\nSeasonal patterns have…\n\nConsistent and predictable shape,\nRepeats with a fixed time period\n\nCyclical patterns have…\n\nInconsistent shape and amplitude,\nRepeats with a variable time period"
+  },
+  {
+    "objectID": "slides/patterns/index.html#section-26",
+    "href": "slides/patterns/index.html#section-26",
+    "title": "Exploratory time series analysis",
+    "section": "",
+    "text": "Seasonal or Cyclical?\nThese common patterns are commonly confused, can you tell them apart?"
+  },
+  {
+    "objectID": "slides/patterns/index.html#section-27",
+    "href": "slides/patterns/index.html#section-27",
+    "title": "Exploratory time series analysis",
+    "section": "",
+    "text": "Seasonal or Cyclical?\nThese common patterns are commonly confused, can you tell them apart?"
+  },
+  {
+    "objectID": "slides/patterns/index.html#section-28",
+    "href": "slides/patterns/index.html#section-28",
+    "title": "Exploratory time series analysis",
+    "section": "",
+    "text": "Seasonal or Cyclical?\nThese common patterns are commonly confused, can you tell them apart?"
+  },
+  {
+    "objectID": "slides/patterns/index.html#section-29",
+    "href": "slides/patterns/index.html#section-29",
+    "title": "Exploratory time series analysis",
+    "section": "",
+    "text": "Seasonal or Cyclical?\nThese common patterns are commonly confused, can you tell them apart?"
+  },
+  {
+    "objectID": "slides/patterns/index.html#section-30",
+    "href": "slides/patterns/index.html#section-30",
+    "title": "Exploratory time series analysis",
+    "section": "",
+    "text": "Time series decomposition\nDecomposition separates time series patterns into individual series.\n\n\n\n\n\n\nAdditive decomposition via STL\n\n\n\\[y_t = S_t + T_t + R_t\\]\n\n\\(y_t=\\) data at time \\(t\\)\n\\(T_t=\\) trend-cycle component at time \\(t\\)\n\\(S_t=\\) seasonal component at time \\(t\\)\n\\(R_t=\\) remainder component at time \\(t\\)"
+  },
+  {
+    "objectID": "slides/patterns/index.html#section-31",
+    "href": "slides/patterns/index.html#section-31",
+    "title": "Exploratory time series analysis",
+    "section": "",
+    "text": "Additive & multiplicative patterns\nSTL only works with additive patterns\n\\[y_t = S_t + T_t + R_t\\]\n\n\nCode\nlibrary(ggplot2)\n\ni &lt;- 1:119\npattern_types_demo &lt;- tsibble(\n  time = yearmonth(i),\n  season = sin(i*2*pi/12),\n  trend = i,\n  remainder = rnorm(length(i)),\n  index = time\n)\npattern_types_demo |&gt; \n  tidyr::pivot_longer(c(season, trend, remainder)) |&gt; \n  ggplot(aes(x = time, y = value, group = name)) +\n  geom_line() +\n  facet_grid(vars(name), scales = \"free_y\") + \n  labs(x = NULL, y = NULL)"
+  },
+  {
+    "objectID": "slides/patterns/index.html#section-32",
+    "href": "slides/patterns/index.html#section-32",
+    "title": "Exploratory time series analysis",
+    "section": "",
+    "text": "Additive & multiplicative patterns\n\\[y_t = S_t + T_t + R_t\\]\n\n\nCode\npattern_types_demo |&gt;\n  autoplot(trend + 10*season + 3*remainder)"
+  },
+  {
+    "objectID": "slides/patterns/index.html#section-33",
+    "href": "slides/patterns/index.html#section-33",
+    "title": "Exploratory time series analysis",
+    "section": "",
+    "text": "Additive & multiplicative patterns\n\\[y_t = S_t \\times T_t \\times R_t\\]\n\n\nCode\npattern_types_demo |&gt;\n  autoplot((2 + season) * trend * (5 + remainder))"
+  },
+  {
+    "objectID": "slides/patterns/index.html#section-34",
+    "href": "slides/patterns/index.html#section-34",
+    "title": "Exploratory time series analysis",
+    "section": "",
+    "text": "Additive or multiplicative?\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nAdditive!\n\n\nSTL works for the patterns in this dataset."
+  },
+  {
+    "objectID": "slides/patterns/index.html#section-35",
+    "href": "slides/patterns/index.html#section-35",
+    "title": "Exploratory time series analysis",
+    "section": "",
+    "text": "Additive or multiplicative?\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nMultiplicative!\n\n\nSTL won’t accurately decompose the patterns in this data."
+  },
+  {
+    "objectID": "slides/patterns/index.html#section-36",
+    "href": "slides/patterns/index.html#section-36",
+    "title": "Exploratory time series analysis",
+    "section": "",
+    "text": "STL for multiplicative patterns\nWhile STL doesn’t work directly with multiplicative patterns, we have a transformational trick 🪄\n\n\\[\\begin{align}\ny_t &= S_t \\times T_t \\times R_t\\\\\n\\log(y_t) &= \\log\\left(S_t \\times T_t \\times R_t\\right)\\log\\\\\n&= \\log(S_t) + \\log(T_t) + \\log(R_t)\n\\end{align}\\]\n\n\n\n\n\n\n\n\nOther transformations\n\n\nMultiplicative patterns aren’t always exactly multiplicative. Instead we often use power transformations via box_cox(y, lambda).\nMore info: https://otexts.com/fpp3/transformations.html"
+  },
+  {
+    "objectID": "slides/patterns/index.html#section-37",
+    "href": "slides/patterns/index.html#section-37",
+    "title": "Exploratory time series analysis",
+    "section": "",
+    "text": "STL decomposition\nEstimate STL decomposition with STL().\n\nlibrary(feasts)\ndcmp &lt;- tourism |&gt; \n  summarise(Trips = sum(Trips)) |&gt; \n  model(STL(Trips)) |&gt; \n  components()\ndcmp\n\n# A dable: 80 x 7 [1Q]\n# Key:     .model [1]\n# :        Trips = trend + season_year + remainder\n   .model     Quarter  Trips  trend season_year remainder season_adjust\n   &lt;chr&gt;        &lt;qtr&gt;  &lt;dbl&gt;  &lt;dbl&gt;       &lt;dbl&gt;     &lt;dbl&gt;         &lt;dbl&gt;\n 1 STL(Trips) 1998 Q1 23182. 21378.       1243.     561.         21939.\n 2 STL(Trips) 1998 Q2 20323. 21168.       -346.    -498.         20670.\n 3 STL(Trips) 1998 Q3 19827. 20992.       -739.    -426.         20566.\n 4 STL(Trips) 1998 Q4 20830. 20893.       -159.      96.7        20989.\n 5 STL(Trips) 1999 Q1 22087. 21079.       1244.    -236.         20843.\n 6 STL(Trips) 1999 Q2 21458. 21019.       -343.     782.         21801.\n 7 STL(Trips) 1999 Q3 19914. 20893.       -737.    -241.         20652.\n 8 STL(Trips) 1999 Q4 20028. 20712.       -168.    -516.         20196.\n 9 STL(Trips) 2000 Q1 22339. 20599.       1247.     494.         21093.\n10 STL(Trips) 2000 Q2 19941. 20791.       -339.    -512.         20280.\n# ℹ 70 more rows"
+  },
+  {
+    "objectID": "slides/patterns/index.html#section-38",
+    "href": "slides/patterns/index.html#section-38",
+    "title": "Exploratory time series analysis",
+    "section": "",
+    "text": "STL decomposition\nAccess decomposition with components().\n\nlibrary(feasts)\ndcmp &lt;- tourism |&gt; \n  summarise(Trips = sum(Trips)) |&gt; \n  model(STL(Trips)) |&gt; \n  components()\ndcmp\n\n# A dable: 80 x 7 [1Q]\n# Key:     .model [1]\n# :        Trips = trend + season_year + remainder\n   .model     Quarter  Trips  trend season_year remainder season_adjust\n   &lt;chr&gt;        &lt;qtr&gt;  &lt;dbl&gt;  &lt;dbl&gt;       &lt;dbl&gt;     &lt;dbl&gt;         &lt;dbl&gt;\n 1 STL(Trips) 1998 Q1 23182. 21378.       1243.     561.         21939.\n 2 STL(Trips) 1998 Q2 20323. 21168.       -346.    -498.         20670.\n 3 STL(Trips) 1998 Q3 19827. 20992.       -739.    -426.         20566.\n 4 STL(Trips) 1998 Q4 20830. 20893.       -159.      96.7        20989.\n 5 STL(Trips) 1999 Q1 22087. 21079.       1244.    -236.         20843.\n 6 STL(Trips) 1999 Q2 21458. 21019.       -343.     782.         21801.\n 7 STL(Trips) 1999 Q3 19914. 20893.       -737.    -241.         20652.\n 8 STL(Trips) 1999 Q4 20028. 20712.       -168.    -516.         20196.\n 9 STL(Trips) 2000 Q1 22339. 20599.       1247.     494.         21093.\n10 STL(Trips) 2000 Q2 19941. 20791.       -339.    -512.         20280.\n# ℹ 70 more rows"
+  },
+  {
+    "objectID": "slides/patterns/index.html#section-39",
+    "href": "slides/patterns/index.html#section-39",
+    "title": "Exploratory time series analysis",
+    "section": "",
+    "text": "STL decomposition\nPlot the decomposition with autoplot()\n\ndcmp |&gt; \n  autoplot()"
+  },
+  {
+    "objectID": "slides/patterns/index.html#section-40",
+    "href": "slides/patterns/index.html#section-40",
+    "title": "Exploratory time series analysis",
+    "section": "",
+    "text": "STL decomposition\nSTL decomposition effectively separates trend and seasonality from the data.\nThis helps to more clearly see the underlying changes over time.\n\n\n\n\n\n\nFine-tuning decomposition\n\n\nWhile the defaults usually work well, it’s worth learning how to adjust the decomposition for better results.\nMore info: https://otexts.com/fpp3/stl.html"
+  },
+  {
+    "objectID": "slides/patterns/index.html#section-41",
+    "href": "slides/patterns/index.html#section-41",
+    "title": "Exploratory time series analysis",
+    "section": "",
+    "text": "Seasonal adjustment\nSeasonally adjusted data removes seasonal patterns to clearly see underlying trends.\nAdjusted data is in the season_adjust column."
+  },
+  {
+    "objectID": "slides/patterns/index.html#section-42",
+    "href": "slides/patterns/index.html#section-42",
+    "title": "Exploratory time series analysis",
+    "section": "",
+    "text": "Exploring many series\nMost datasets contain many related time series identified by one or more keys.\nFor example, tourism contains 304 series.\n\ntourism |&gt; \n  distinct(Region, State, Purpose)\n\n# A tibble: 304 × 3\n   Region         State              Purpose \n   &lt;chr&gt;          &lt;chr&gt;              &lt;chr&gt;   \n 1 Adelaide       South Australia    Business\n 2 Adelaide       South Australia    Holiday \n 3 Adelaide       South Australia    Other   \n 4 Adelaide       South Australia    Visiting\n 5 Adelaide Hills South Australia    Business\n 6 Adelaide Hills South Australia    Holiday \n 7 Adelaide Hills South Australia    Other   \n 8 Adelaide Hills South Australia    Visiting\n 9 Alice Springs  Northern Territory Business\n10 Alice Springs  Northern Territory Holiday \n# ℹ 294 more rows"
+  },
+  {
+    "objectID": "slides/patterns/index.html#section-43",
+    "href": "slides/patterns/index.html#section-43",
+    "title": "Exploratory time series analysis",
+    "section": "",
+    "text": "Exploring many series\nThis can make visualising the patterns of each time series challenging.\n\ntourism |&gt; \n  autoplot() + \n  guides(colour = \"none\")"
+  },
+  {
+    "objectID": "slides/patterns/index.html#section-44",
+    "href": "slides/patterns/index.html#section-44",
+    "title": "Exploratory time series analysis",
+    "section": "",
+    "text": "Time series features\nInstead we can calculate features of the time series, which summarise patterns over time.\n\ntourism |&gt; \n  features(Trips, feat_stl)\n\n# A tibble: 304 × 12\n   Region State Purpose trend_strength seasonal_strength_year seasonal_peak_year\n   &lt;chr&gt;  &lt;chr&gt; &lt;chr&gt;            &lt;dbl&gt;                  &lt;dbl&gt;              &lt;dbl&gt;\n 1 Adela… Sout… Busine…          0.464                  0.407                  3\n 2 Adela… Sout… Holiday          0.554                  0.619                  1\n 3 Adela… Sout… Other            0.746                  0.202                  2\n 4 Adela… Sout… Visiti…          0.435                  0.452                  1\n 5 Adela… Sout… Busine…          0.464                  0.179                  3\n 6 Adela… Sout… Holiday          0.528                  0.296                  2\n 7 Adela… Sout… Other            0.593                  0.404                  2\n 8 Adela… Sout… Visiti…          0.488                  0.254                  0\n 9 Alice… Nort… Busine…          0.534                  0.251                  0\n10 Alice… Nort… Holiday          0.381                  0.832                  3\n# ℹ 294 more rows\n# ℹ 6 more variables: seasonal_trough_year &lt;dbl&gt;, spikiness &lt;dbl&gt;,\n#   linearity &lt;dbl&gt;, curvature &lt;dbl&gt;, stl_e_acf1 &lt;dbl&gt;, stl_e_acf10 &lt;dbl&gt;"
+  },
+  {
+    "objectID": "slides/patterns/index.html#section-45",
+    "href": "slides/patterns/index.html#section-45",
+    "title": "Exploratory time series analysis",
+    "section": "",
+    "text": "Time series features\nSTL decomposition based features include:\n\n\n\n\n\n\nSeasonal strength (season_strength_year)\n\n\nThe signal to noise ratio of seasonality from 0-1.\n\\[\\max\\left(0, 1-\\frac{\\text{Var}(R_t)}{\\text{Var}(S_t+R_t)}\\right)\\]\n\n\n\n\n\n\n\n\n\nTrend strength (trend_strength)\n\n\nThe signal to noise ratio of trend from 0-1.\n\\[\\max\\left(0, 1-\\frac{\\text{Var}(R_t)}{\\text{Var}(T_t+R_t)}\\right)\\]"
+  },
+  {
+    "objectID": "slides/patterns/index.html#section-46",
+    "href": "slides/patterns/index.html#section-46",
+    "title": "Exploratory time series analysis",
+    "section": "",
+    "text": "Plotting features\nThese features can then be plotted to reveal the patterns and structure of many series.\n\ntourism |&gt;\n  features(Trips, feat_stl) |&gt;\n  ggplot(aes(x = trend_strength, y = seasonal_strength_year, col = Purpose)) +\n  geom_point() + facet_wrap(vars(State))"
+  },
+  {
+    "objectID": "slides/patterns/index.html#section-47",
+    "href": "slides/patterns/index.html#section-47",
+    "title": "Exploratory time series analysis",
+    "section": "",
+    "text": "The most seasonal series\n\ntourism |&gt;\n  features(Trips, feat_stl) |&gt;\n  slice_max(seasonal_strength_year, n = 3) |&gt; \n  inner_join(x = tourism, y = _, by = join_by(Region, State, Purpose)) |&gt; \n  ggplot(aes(x = Quarter, y = Trips)) + geom_line() + \n  facet_grid(vars(Region, State, Purpose), scales = \"free_y\")"
+  },
+  {
+    "objectID": "slides/patterns/index.html#section-48",
+    "href": "slides/patterns/index.html#section-48",
+    "title": "Exploratory time series analysis",
+    "section": "",
+    "text": "The most ‘trendy’ series\n\ntourism |&gt;\n  features(Trips, feat_stl) |&gt;\n  slice_max(trend_strength, n = 3) |&gt; \n  inner_join(x = tourism, y = _, by = join_by(Region, State, Purpose)) |&gt; \n  ggplot(aes(x = Quarter, y = Trips)) + geom_line() + \n  facet_grid(vars(Region, State, Purpose), scales = \"free_y\")"
+  },
+  {
+    "objectID": "slides/patterns/index.html#section-49",
+    "href": "slides/patterns/index.html#section-49",
+    "title": "Exploratory time series analysis",
+    "section": "",
+    "text": "Many features for many series\nThere are many features beyond STL decomposition for describing time series patterns.\n\n?features_by_tag\n?features_by_pkg\n\n\n\n\n\n\n\n\nMore applications for features\n\n\nFeatures can also be used for other tasks including clustering and anomaly detection.\nMore info: https://otexts.com/fpp3/features.html"
+  },
+  {
+    "objectID": "slides/patterns/index.html#time-for-a-break",
+    "href": "slides/patterns/index.html#time-for-a-break",
+    "title": "Exploratory time series analysis",
+    "section": "⏰ Time for a break!",
+    "text": "⏰ Time for a break!\n\n\n\n\n\n\n\n\nUp next…\n\n\n\nExploring seasonal patterns\nMultiple seasonality\nHoliday effects\n\n\n\n\n\n\n\n\n\n\n\nUseful links\n\n\n social.mitchelloharawild.com\n workshop.nectric.com.au/isf2025/\n mitchelloharawild/workshop-etsa-isf2025"
+  },
+  {
+    "objectID": "slides/patterns/index.html#unsplash-credits",
+    "href": "slides/patterns/index.html#unsplash-credits",
+    "title": "Exploratory time series analysis",
+    "section": "Unsplash credits",
+    "text": "Unsplash credits\n\n\n\n\n\n\n\nThanks to these Unsplash contributors for their photos\n\n\n\n\n\nSander Weeteling: Photo\nBalint Mendlik: Photo\nJohn Fowler: Taken near sunset at White Sands National Monumen…\nDavid Pisnoy: Photo\nChris Lee: Behind the leaves.\nJon Tyson: Photo\nRandy Fath: Photo\nNathan Dumlao: Photo\nSander Weeteling: Photo"
   }
 ]

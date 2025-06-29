@@ -1,6 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
+    <loc>https://workshop.nectric.com.au/isf2025/slides/seasons/index.html</loc>
+    <lastmod>2025-06-29T03:13:55.010Z</lastmod>
+  </url>
+  <url>
     <loc>https://workshop.nectric.com.au/isf2025/license.html</loc>
     <lastmod>2024-11-27T13:25:44.735Z</lastmod>
   </url>
@@ -10,6 +14,10 @@
   </url>
   <url>
     <loc>https://workshop.nectric.com.au/isf2025/index.html</loc>
-    <lastmod>2024-11-27T13:25:44.735Z</lastmod>
+    <lastmod>2025-06-28T16:41:07.586Z</lastmod>
+  </url>
+  <url>
+    <loc>https://workshop.nectric.com.au/isf2025/slides/patterns/index.html</loc>
+    <lastmod>2025-06-28T23:42:26.947Z</lastmod>
   </url>
 </urlset>
