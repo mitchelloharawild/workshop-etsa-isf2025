@@ -32,11 +32,11 @@ aus_accommodation_total <- fpp3::aus_accommodation |>
 ::: {.column width="60%"}
 
 ::: {.title data-id="title"}
-Tidy time series analysis and forecasting
+Exploratory time series analysis
 :::
 
 ::: {.subtitle data-id="subtitle"}
-Seasonality and calendrical patterns
+Seasons and calendrical patterns
 :::
 
 ::: {.dateplace}
@@ -63,7 +63,1414 @@ Seasonality and calendrical patterns
 
 ![](../backgrounds/sander-weeteling-KABfjuSOx74-unsplash.jpg){.image-left}
 
+## {}
 
+::: columns
+
+::: {.column width="40%"}
+:::
+
+::: {.column width="60%"}
+
+### Visualising temporal patterns
+
+Recall the time plot allowed us to identify temporal patterns including trend, seasonality, and cycles.
+
+```{r}
+#| echo: true
+pbs_scripts <- PBS |>
+  summarise(Scripts = sum(Scripts))
+pbs_scripts |>
+  autoplot(Scripts)
+```
+
+:::
+:::
+
+![](../backgrounds/nathan-dumlao-5Hl5reICevY-unsplash.jpg){.image-left}
+
+
+## {}
+
+::: columns
+
+::: {.column width="40%"}
+:::
+
+::: {.column width="60%"}
+
+### Visualising temporal patterns
+
+Creating a time plot with `autoplot()` is quick and easy. A time plot can also be made with ggplot2's grammar for more options.
+
+```{r}
+#| echo: true
+pbs_scripts |> 
+  ggplot(aes(x = Month, y = Scripts)) +
+  geom_line()
+```
+
+:::
+:::
+
+![](../backgrounds/nathan-dumlao-5Hl5reICevY-unsplash.jpg){.image-left}
+
+## {}
+
+::: columns
+
+::: {.column width="40%"}
+:::
+
+::: {.column width="60%"}
+
+### Visualising temporal patterns
+
+The time plot allows us identify the presence of seasonality, but it is less effective in seeing the **shape** of seasonal patterns.
+
+::: fragment
+
+::: callout-caution
+## Question
+
+How else could we represent time to more clearly show annual seasonal patterns?
+
+:::
+:::
+
+:::
+:::
+
+![](../backgrounds/nathan-dumlao-5Hl5reICevY-unsplash.jpg){.image-left}
+
+## {}
+
+::: columns
+
+::: {.column width="40%"}
+:::
+
+::: {.column width="60%"}
+
+### Visualising seasonality
+
+Adjusting the plot's x-axis so that it shows *cyclical* time (month of year) rather than *continuous* time (year month) highlights seasonal patterns.
+
+::: callout-caution
+## Your turn
+
+Try adjusting the following code to plot *month of year* along the x-axis.
+
+```{r}
+#| echo: true
+#| eval: false
+pbs_scripts |> 
+  ggplot(aes(x = Month, y = Scripts)) +
+  geom_line()
+```
+
+
+Hint: `lubridate::month()` and `lubridate::year()` are useful tools for extracting the month and year from time.
+:::
+
+:::
+:::
+
+![](../backgrounds/autumn-mott-rodeheaver-SPd9CSoWCkY-unsplash.jpg){.image-left}
+
+
+## {}
+
+::: columns
+
+::: {.column width="40%"}
+:::
+
+::: {.column width="60%"}
+
+### Visualising seasonality
+
+```{r}
+#| echo: true
+pbs_scripts |> 
+  ggplot(aes(
+    x = month(Month, label = TRUE),
+    y = Scripts, group = year(Month)
+  )) +
+  geom_line() + 
+  labs("Month of Year")
+```
+
+:::
+:::
+
+![](../backgrounds/autumn-mott-rodeheaver-SPd9CSoWCkY-unsplash.jpg){.image-left}
+
+
+## {}
+
+::: columns
+
+::: {.column width="40%"}
+:::
+
+::: {.column width="60%"}
+
+### Visualising seasonality
+
+```{r}
+pbs_scripts |> 
+  ggplot(aes(
+    x = month(Month, label = TRUE),
+    y = Scripts, group = year(Month)
+  )) +
+  geom_line() + 
+  labs("Month of Year")
+```
+
+::: callout-caution
+## Your turn
+
+Describe the shape of the seasonal pattern.
+
+When are the most scripts (the peak) and the least scripts (the trough) issued?
+:::
+
+:::
+:::
+
+![](../backgrounds/autumn-mott-rodeheaver-SPd9CSoWCkY-unsplash.jpg){.image-left}
+
+
+## {}
+
+::: columns
+
+::: {.column width="40%"}
+:::
+
+::: {.column width="60%"}
+
+### The season plot
+
+```{r}
+#| echo: true
+pbs_scripts |> 
+  gg_season(Scripts, period = "1 year")
+```
+
+This plot is known as a **season plot**, which can be made quickly with the plot helper function `gg_season()`.
+
+:::
+:::
+
+![](../backgrounds/autumn-mott-rodeheaver-SPd9CSoWCkY-unsplash.jpg){.image-left}
+
+## {}
+
+::: columns
+
+::: {.column width="40%"}
+:::
+
+::: {.column width="60%"}
+
+### The seasonal period
+
+```{r}
+#| echo: true
+#| eval: false
+pbs_scripts |> 
+  gg_season(Scripts, period = "1 year")
+```
+
+The `period` argument is a `duration` for the length of the data's seasonal pattern.
+
+It works by rescaling the x-axis so that it repeats after each year.
+
+Other common seasonal periods include:
+
+* `1 week`
+* `1 day`
+* `1 hour`
+
+:::
+:::
+
+![](../backgrounds/autumn-mott-rodeheaver-SPd9CSoWCkY-unsplash.jpg){.image-left}
+
+## {.fragment-remove}
+
+::: columns
+
+::: {.column width="60%"}
+
+### Visualising seasonality
+
+::: {.fragment .fade-out fragment-index=1}
+The `aus_production` dataset contains the production of Australian Gas in petajoules (among other goods).
+:::
+
+```{r}
+#| echo: true
+aus_production |> 
+  autoplot(Gas)
+```
+
+
+::: {.fragment .fade-up fragment-index=1}
+::: callout-caution
+## Your turn
+
+Plot the shape of the seasonal pattern, in which quarter does Australia produce the most and least gas?
+:::
+:::
+
+:::
+:::
+
+![](../backgrounds/pruthvi-sagar-a-r-xxgNqAtIJ0s-unsplash.jpg){.image-right}
+
+
+## {.fragment-remove}
+
+::: columns
+
+::: {.column width="60%"}
+
+### Visualising seasonality
+
+```{r}
+#| echo: true
+aus_production |> 
+  gg_season(Gas, period = "1 year")
+```
+
+::: {.fragment .fade-out fragment-index=1}
+::: callout-note
+## Describing the seasonal pattern
+
+This plot shows that peak production is in Q3 with a trough in Q1. Seasonality is getting stronger recently.
+:::
+:::
+
+::: {.fragment .fade-up fragment-index=1}
+::: callout-tip
+## Can we do better?
+
+It's hard to see the seasonality from the early data, how can we improve it?
+:::
+:::
+
+:::
+:::
+
+![](../backgrounds/pruthvi-sagar-a-r-xxgNqAtIJ0s-unsplash.jpg){.image-right}
+
+## {.fragment-remove}
+
+::: columns
+
+::: {.column width="60%"}
+
+### Visualising seasonality
+
+::: {.fragment .fade-out fragment-index=1}
+```{r}
+#| echo: true
+aus_production |> 
+  gg_season(log(Gas), period = "1 year")
+```
+:::
+
+::: {.fragment .fade-up fragment-index=1}
+```{r}
+#| echo: true
+aus_production |> 
+  gg_season(Gas, period = "1 year") + 
+  scale_y_log10()
+```
+
+::: {.fragment .fade-out fragment-index=2}
+::: callout-note
+## Plotting log transformed data
+
+Recall that log transforming the data rescales multiplicative patterns into additive ones.
+:::
+:::
+
+:::
+
+::: {.fragment .fade-up fragment-index=2}
+::: callout-tip
+## Can we do better?
+
+The trend makes it difficult to compare across and within seasons, can we remove the trend?
+:::
+:::
+
+:::
+:::
+
+![](../backgrounds/pruthvi-sagar-a-r-xxgNqAtIJ0s-unsplash.jpg){.image-right}
+
+
+## {.fragment-remove}
+
+::: columns
+
+::: {.column width="60%"}
+
+### Visualising seasonality
+
+::: {.fragment .fade-out fragment-index=1}
+```{r}
+#| echo: true
+#| fig-height: 4.5
+aus_production |> 
+  model(STL(log(Gas))) |> 
+  components() |> 
+  autoplot()
+```
+
+::: callout-tip
+## STL decomposition
+
+Recall that STL allows us to separate trend from seasonality, let's plot only the seasonal component.
+:::
+:::
+
+::: {.fragment .fade-up fragment-index=1}
+```{r}
+#| echo: true
+#| fig-height: 4.5
+aus_production |> 
+  model(STL(log(Gas))) |> 
+  components() |> 
+  gg_season(season_year, period = "1 year")
+```
+
+::: {.fragment .fade-out fragment-index=2}
+::: callout-note
+## Plotting seasonality from decomposition
+
+Removing the trend and noise allows us to clearly see the seasonal pattern, and even how it changes over time.
+:::
+:::
+
+:::
+
+::: {.fragment .fade-up fragment-index=2}
+::: callout-tip
+## Can we do better?
+
+How can we more clearly see the changes in the seasonal pattern over time?
+:::
+:::
+
+:::
+:::
+
+![](../backgrounds/pruthvi-sagar-a-r-xxgNqAtIJ0s-unsplash.jpg){.image-right}
+
+## {.fragment-remove}
+
+::: columns
+
+::: {.column width="60%"}
+
+### Visualising seasonality
+
+::: {.fragment .fade-out fragment-index=1}
+::: callout-tip
+## Remap the aesthetics
+
+Swap the x and colour aesthetic mappings to plot the years on the x-axis, with colours for each quarter.
+:::
+:::
+
+```{r}
+#| echo: true
+#| code-fold: show
+aus_production |> 
+  model(STL(log(Gas))) |> 
+  components() |> 
+  ggplot(aes(x = year(Quarter), y = season_year, 
+             colour = paste0("Q", quarter(Quarter)))) + 
+  geom_line() + 
+  labs(x = "Time", y = "Seasonality", colour = "Quarter", title = "Gas production in Australia")
+```
+
+
+::: {.fragment .fade-up fragment-index=1}
+::: callout-note
+Gas production in Q1 is increasing while Q3 is decreasing.
+:::
+:::
+
+:::
+:::
+
+![](../backgrounds/pruthvi-sagar-a-r-xxgNqAtIJ0s-unsplash.jpg){.image-right}
+
+## {.fragment-remove}
+
+::: columns
+
+::: {.column width="60%"}
+
+### Visualising seasonality
+
+::: {.fragment .fade-out fragment-index=1}
+::: callout-tip
+## Remap the aesthetics
+
+Swap the x and colour aesthetic mappings to plot the years on the x-axis, with colours for each quarter.
+:::
+:::
+
+```{r}
+#| echo: true
+#| code-fold: show
+aus_production |> 
+  model(STL(log(Gas))) |> 
+  components() |> 
+  ggplot(aes(x = year(Quarter), y = season_year, 
+             colour = paste0("Q", quarter(Quarter)))) + 
+  geom_line() + 
+  labs(x = "Time", y = "Seasonality", colour = "Quarter", title = "Gas production in Australia")
+```
+
+
+::: {.fragment .fade-up fragment-index=1}
+::: callout-note
+Gas production in Q1 is increasing while Q3 is decreasing.
+:::
+:::
+
+:::
+:::
+
+![](../backgrounds/pruthvi-sagar-a-r-xxgNqAtIJ0s-unsplash.jpg){.image-right}
+
+## {.fragment-remove}
+
+::: columns
+
+::: {.column width="60%"}
+
+### Visualising seasonality
+
+::: callout-tip
+## Facet by season
+
+This produces a 'seasonal sub-series plot', which is useful for visualising changes in seasonality over time.
+:::
+
+```{r}
+#| echo: true
+#| code-fold: show
+aus_production |> 
+  model(STL(log(Gas))) |> 
+  components() |> 
+  ggplot(aes(x = year(Quarter), y = season_year)) + 
+  geom_line() + 
+  facet_grid(cols = vars(paste0("Q", quarter(Quarter)))) +
+  labs(x = "Time", y = "Seasonality", title = "Gas production in Australia")
+```
+
+:::
+:::
+
+![](../backgrounds/pruthvi-sagar-a-r-xxgNqAtIJ0s-unsplash.jpg){.image-right}
+
+## {}
+
+::: columns
+
+::: {.column width="40%"}
+:::
+
+::: {.column width="60%"}
+
+### The seasonal subseries plot
+
+```{r}
+#| echo: true
+aus_production |> 
+  gg_subseries(Gas, period = "1 year")
+```
+
+This plot is known as a **seasonal subseries plot**, which can be made quickly with the plot helper function `gg_subseries()`.
+
+:::
+:::
+
+![](../backgrounds/autumn-mott-rodeheaver-SPd9CSoWCkY-unsplash.jpg){.image-left}
+
+## {}
+
+::: columns
+
+::: {.column width="40%"}
+:::
+
+::: {.column width="60%"}
+
+### The seasonal subseries plot
+
+::: callout-tip
+## Seasonal decomposition advised
+
+Seeing changes in seasonality when the data has trend, noise, and other patterns is tricky! This plot works best in combination with STL decomposition.
+:::
+
+```{r}
+#| echo: true
+#| fig-height: 4.5
+aus_production |> 
+  model(STL(log(Gas))) |> 
+  components() |> 
+  gg_subseries(season_year, period = "1 year")
+```
+
+
+:::
+:::
+
+![](../backgrounds/autumn-mott-rodeheaver-SPd9CSoWCkY-unsplash.jpg){.image-left}
+
+
+## {}
+
+::: columns
+
+::: {.column width="40%"}
+:::
+
+::: {.column width="60%"}
+
+### Changing seasonality
+
+::: callout-caution
+## Your turn!
+
+Is the seasonal pattern in the total subsidised prescriptions (`Scripts`) in Australia changing over time?
+:::
+
+```{r}
+#| echo: true
+pbs_scripts <- PBS |>
+  summarise(Scripts = sum(Scripts))
+pbs_scripts |>
+  autoplot(Scripts)
+```
+
+:::
+:::
+
+![](../backgrounds/autumn-mott-rodeheaver-SPd9CSoWCkY-unsplash.jpg){.image-left}
+
+
+## {}
+
+::: columns
+
+::: {.column width="40%"}
+:::
+
+::: {.column width="60%"}
+
+### Changing seasonality
+
+```{r}
+#| echo: true
+#| fig-height: 5
+pbs_scripts |> 
+  model(STL(Scripts)) |> 
+  components() |> 
+  gg_subseries(season_year, period = "1 year")
+```
+
+::: {.fragment .fade-up}
+::: callout-note
+The number of scripts in December is dropping rapidly.
+
+They appear to be redistributed into Oct, Nov, and Jan.
+:::
+:::
+
+:::
+:::
+
+![](../backgrounds/autumn-mott-rodeheaver-SPd9CSoWCkY-unsplash.jpg){.image-left}
+
+
+## {}
+
+::: columns
+
+::: {.column width="40%"}
+:::
+
+::: {.column width="60%"}
+
+### Recap of plotting time series
+
+* Time plots
+* Season plots
+* Seasonal subseries plots
+
+:::
+:::
+
+![](../backgrounds/autumn-mott-rodeheaver-SPd9CSoWCkY-unsplash.jpg){.image-left}
+
+
+## {}
+
+::: columns
+
+::: {.column width="60%"}
+
+### Complex seasonality
+
+Complex seasonality describes two or more seasonal patterns.
+
+Complex seasonal patterns:
+
+* often interact with each-other
+* can be based on other calendars (e.g. holidays)
+
+::: {.fragment .fade-up}
+::: callout-tip
+## Frequent seasonality
+
+Multiple seasonality is common in daily & sub-daily data.
+
+It can be difficult to forecast, so first consider if you need daily or sub-daily forecasts for making decisions.
+:::
+:::
+
+:::
+:::
+
+![](../backgrounds/aaron-burden-Qy-CBKUg_X8-unsplash.jpg){.image-right}
+
+
+## {}
+
+### Victorian electricity demand
+
+<video style="width: 100%;" src="anim/anim1.mp4" data-lazy-loaded="" data-paused-by-reveal=""><a href="anim/anim1.mp4">Video</a></video>
+
+## {}
+
+### Victorian electricity demand
+
+<video style="width: 100%;" src="anim/anim2.mp4" data-lazy-loaded="" data-paused-by-reveal=""><a href="anim/anim2.mp4">Video</a></video>
+
+## {}
+
+### Victorian electricity demand
+
+<video style="width: 100%;" src="anim/anim3.mp4" data-lazy-loaded="" data-paused-by-reveal=""><a href="anim/anim3.mp4">Video</a></video>
+
+
+## {}
+
+### Victorian electricity demand
+
+<video style="width: 100%;" src="anim/anim4.mp4" data-lazy-loaded="" data-paused-by-reveal=""><a href="anim/anim4.mp4">Video</a></video>
+
+## {}
+
+::: columns
+
+::: {.column width="60%"}
+
+### Complex seasonality
+
+There are two key strategies for clearly plotting multiple seasonal patterns:
+
+::: {.fragment .fade-up}
+::: callout-note
+## Temporal aggregation
+
+Aggregate time into coarser frequencies to sum over finer-grained seasonal patterns.
+
+This is useful for plotting annual seasonality
+:::
+:::
+
+::: {.fragment .fade-up}
+::: callout-note
+## Seasonal decomposition
+
+Separate each of the seasonal patterns using MSTL (multiple seasonal trend by loess) decomposition.
+
+This is best for daily / weekly seasonality
+:::
+:::
+
+:::
+:::
+
+![](../backgrounds/aaron-burden-Qy-CBKUg_X8-unsplash.jpg){.image-right}
+
+
+## {}
+
+::: columns
+
+::: {.column width="60%"}
+
+### Temporal aggregation
+
+The Victorian electricity demand data has three seasonal patterns:
+
+* Annual (weather)
+* Weekly (work)
+* Daily (sleep)
+
+The original data has a 30 minute frequency.
+
+```{r}
+#| echo: true
+vic_elec
+```
+
+:::
+:::
+
+![](../backgrounds/aaron-burden-Qy-CBKUg_X8-unsplash.jpg){.image-right}
+
+
+## {}
+
+::: columns
+
+::: {.column width="60%"}
+
+### Temporal aggregation
+
+When plotted at a 30 minute frequency, it is difficult to see any seasonal pattern clearly.
+
+```{r}
+#| echo: true
+vic_elec |> 
+  autoplot(Demand)
+```
+
+:::
+:::
+
+![](../backgrounds/aaron-burden-Qy-CBKUg_X8-unsplash.jpg){.image-right}
+
+## {.fragment-remove}
+
+::: columns
+
+::: {.column width="60%"}
+
+### Temporal aggregation
+
+::: {.fragment .fade-out fragment-index=1}
+Aggregation to a weekly frequency will sum over the daily and weekly patterns.
+:::
+
+```{r}
+#| echo: true
+#| fig-height: 4.5
+vic_elec |> 
+  index_by(Week = yearweek(Time)) |> 
+  summarise(Demand = sum(Demand)) |> 
+  autoplot(Demand)
+```
+
+::: {.fragment .fade-up fragment-index=1}
+::: callout-important
+## Partial aggregation
+
+When aggregating time, you need to ensure the aggregation window has all necessary data. 
+:::
+:::
+
+:::
+:::
+
+![](../backgrounds/aaron-burden-Qy-CBKUg_X8-unsplash.jpg){.image-right}
+
+## {.fragment-remove}
+
+::: columns
+
+::: {.column width="60%"}
+
+### Temporal aggregation
+
+```{r}
+#| echo: true
+#| fig-height: 4.5
+#| code-line-numbers: "3-4"
+vic_elec |> 
+  index_by(Week = yearweek(Time)) |> 
+  summarise(Demand = sum(Demand), n = length(Week)) |>
+  filter(n >= 2*24*7 - 2) |> 
+  autoplot(Demand)
+```
+
+:::
+:::
+
+![](../backgrounds/aaron-burden-Qy-CBKUg_X8-unsplash.jpg){.image-right}
+
+## {.fragment-remove}
+
+::: columns
+
+::: {.column width="60%"}
+
+### Temporal aggregation
+
+```{r}
+#| echo: true
+#| fig-height: 4.5
+vic_elec |> 
+  index_by(Week = yearweek(Date)) |> 
+  summarise(Demand = sum(Demand), n = length(Week)) |>
+  filter(n >= 2*24*7 - 2) |>
+  gg_season(Demand, period = "1 year")
+```
+
+:::
+:::
+
+![](../backgrounds/aaron-burden-Qy-CBKUg_X8-unsplash.jpg){.image-right}
+
+## {.fragment-remove}
+
+::: columns
+
+::: {.column width="60%"}
+
+### Temporal aggregation
+
+The `pedestrian` dataset contains the hourly number of pedestrians at various places in Melbourne, Australia.
+
+```{r}
+#| echo: true
+pedestrian |> 
+  filter(Sensor == "Southern Cross Station") |> 
+  autoplot(Count)
+```
+
+
+:::
+:::
+
+![](../backgrounds/nao-takabayashi-dh_2ouVgIYY-unsplash.jpg){.image-right}
+
+## {.fragment-remove}
+
+::: columns
+
+::: {.column width="60%"}
+
+### Temporal aggregation
+
+```{r}
+#| echo: true
+pedestrian |> 
+  filter(Sensor == "Southern Cross Station") |> 
+  index_by(Week = yearweek(Date_Time)) |>
+  summarise(Count = sum(Count), n = length(Week)) |> 
+  filter(n >= 24*7 - 1) |> 
+  fill_gaps() |> 
+  gg_season(Count, period = "1 year")
+```
+
+
+:::
+:::
+
+![](../backgrounds/nao-takabayashi-dh_2ouVgIYY-unsplash.jpg){.image-right}
+
+## {.fragment-remove}
+
+::: columns
+
+::: {.column width="60%"}
+
+### Temporal aggregation
+
+Since there doesn't appear to be (substantial) annual seasonality, we can use aggregation to look for weekly seasonality.
+
+::: callout-caution
+## Your turn!
+Use the `Date` column with `index_by()` to aggregate to daily data, then use `gg_season()` to plot the weekly seasonal pattern.
+
+Here's some code to start:
+
+```{r}
+#| echo: true
+#| eval: false
+pedestrian |> 
+  filter(Sensor == "Southern Cross Station") |> 
+  index_by(???) |>
+  summarise(Count = sum(Count))
+  gg_season(???)
+```
+
+:::
+
+:::
+:::
+
+![](../backgrounds/nao-takabayashi-dh_2ouVgIYY-unsplash.jpg){.image-right}
+
+
+## {.fragment-remove}
+
+::: columns
+
+::: {.column width="60%"}
+
+### Temporal aggregation
+
+```{r}
+#| echo: true
+pedestrian |> 
+  filter(Sensor == "Southern Cross Station") |> 
+  index_by(Date) |>
+  summarise(Count = sum(Count)) |> 
+  gg_season(Count, period = "1 week")
+```
+
+
+:::
+:::
+
+![](../backgrounds/nao-takabayashi-dh_2ouVgIYY-unsplash.jpg){.image-right}
+
+## {.fragment-remove}
+
+::: columns
+
+::: {.column width="60%"}
+
+### Seasonal decomposition
+
+The STL model can also decompose multiple seasonalities.
+
+```{r}
+#| echo: true
+#| fig-height: 4.5
+dcmp <- vic_elec |> 
+  model(STL(log(Demand) ~ season(period = "year") +
+              season(period = "week") + season(period = "day"))) |> 
+  components()
+dcmp |> 
+  autoplot()
+```
+
+:::
+:::
+
+![](../backgrounds/aaron-burden-Qy-CBKUg_X8-unsplash.jpg){.image-right}
+
+## {.fragment-remove}
+
+::: columns
+
+::: {.column width="60%"}
+
+### Seasonal decomposition
+
+This is effective in combination with season plots to show seasonal patterns.
+
+```{r}
+#| echo: true
+dcmp |> 
+  gg_season(season_year, period = "1 year")
+```
+
+:::
+:::
+
+![](../backgrounds/aaron-burden-Qy-CBKUg_X8-unsplash.jpg){.image-right}
+
+
+## {.fragment-remove}
+
+::: columns
+
+::: {.column width="60%"}
+
+### Seasonal decomposition
+
+This is effective in combination with season plots to show seasonal patterns.
+
+```{r}
+#| echo: true
+dcmp |> 
+  gg_season(season_week, period = "1 week")
+```
+
+:::
+:::
+
+![](../backgrounds/aaron-burden-Qy-CBKUg_X8-unsplash.jpg){.image-right}
+
+
+## {.fragment-remove}
+
+::: columns
+
+::: {.column width="60%"}
+
+### Seasonal decomposition
+
+This is effective in combination with season plots to show seasonal patterns.
+
+```{r}
+#| echo: true
+dcmp |> 
+  gg_season(season_day, period = "1 day")
+```
+
+:::
+:::
+
+![](../backgrounds/aaron-burden-Qy-CBKUg_X8-unsplash.jpg){.image-right}
+
+
+## {.fragment-remove}
+
+::: columns
+
+::: {.column width="60%"}
+
+### Seasonal decomposition
+
+Specific combinations of seasonal patterns can also be computed and plotted.
+
+::: {.fragment .fade-out fragment-index=1}
+```{r}
+#| echo: true
+dcmp |> 
+  gg_season(season_day + season_week, 
+            period = "1 week")
+```
+:::
+
+::: {.fragment .fade-up fragment-index=1}
+::: callout-important
+## Caution: model limitations
+
+Recall the STL decomposition is additive, so interactions between different seasonality will not be captured. The seasonal components are only as accurate as the model.
+:::
+:::
+
+:::
+:::
+
+![](../backgrounds/aaron-burden-Qy-CBKUg_X8-unsplash.jpg){.image-right}
+
+## {.fragment-remove}
+
+::: columns
+
+::: {.column width="60%"}
+
+### Seasonal decomposition
+
+::: callout-caution
+## Your turn!
+
+Use an STL decomposition and `gg_season()` to clearly show the seasonal patterns in pedestrian traffic.
+
+```{r}
+#| echo: true
+ped_dcmp <- pedestrian |> 
+  filter(Sensor == "Southern Cross Station") |> 
+  fill_gaps(Count = 0) |> 
+  model(STL(Count)) |> 
+  components()
+ped_dcmp |> 
+  autoplot()
+```
+
+:::
+
+:::
+:::
+
+![](../backgrounds/nao-takabayashi-dh_2ouVgIYY-unsplash.jpg){.image-right}
+
+
+## {.fragment-remove}
+
+::: columns
+
+::: {.column width="60%"}
+
+### Seasonal decomposition
+
+```{r}
+#| echo: true
+ped_dcmp |> 
+  gg_season(season_year, period = "1 year")
+```
+
+:::
+:::
+
+![](../backgrounds/nao-takabayashi-dh_2ouVgIYY-unsplash.jpg){.image-right}
+
+## {.fragment-remove}
+
+::: columns
+
+::: {.column width="60%"}
+
+### Seasonal decomposition
+
+```{r}
+#| echo: true
+ped_dcmp |> 
+  gg_season(season_week, period = "1 week")
+```
+
+::: {.fragment .fade-up}
+::: callout-important
+## Interaction effects
+
+The weekly seasonal pattern interacts with the daily seasonal pattern, so the model doesn't work here.
+:::
+:::
+
+:::
+:::
+
+![](../backgrounds/nao-takabayashi-dh_2ouVgIYY-unsplash.jpg){.image-right}
+
+## {.fragment-remove}
+
+::: columns
+
+::: {.column width="60%"}
+
+### Seasonal decomposition
+
+```{r}
+#| echo: true
+ped_dcmp |> 
+  gg_season(season_day, period = "1 day")
+```
+
+::: callout-important
+## Interaction effects
+
+The weekly seasonal pattern interacts with the daily seasonal pattern, so the model doesn't work here.
+
+:::
+
+:::
+:::
+
+![](../backgrounds/nao-takabayashi-dh_2ouVgIYY-unsplash.jpg){.image-right}
+
+
+## {.fragment-remove}
+
+::: columns
+
+::: {.column width="60%"}
+
+### Seasonal decomposition
+
+::: callout-tip
+## Interaction effects
+
+Combine interacting seasonalities and use facets to separate the interactions (e.g. weekday and weekend effects).
+:::
+
+::: {.fragment .fade-out fragment-index=1}
+
+```{r}
+#| echo: true
+#| eval: false
+ped_dcmp |> 
+  mutate(Weekday = wday(Date_Time, week_start = 1) %in% 1:5) |> 
+  gg_season(season_day + season_week, period = "1 day") + 
+  facet_wrap(vars(Weekday))
+```
+:::
+
+
+::: {.fragment .fade-up fragment-index=1}
+```{r}
+#| echo: false
+ped_dcmp |> 
+  mutate(Weekday = wday(Date_Time, week_start = 1) %in% 1:5) |> 
+  gg_season(season_day + season_week, period = "1 day") + 
+  facet_wrap(vars(Weekday))
+```
+:::
+
+:::
+:::
+
+![](../backgrounds/nao-takabayashi-dh_2ouVgIYY-unsplash.jpg){.image-right}
+
+
+## {}
+
+::: columns
+
+::: {.column width="40%"}
+:::
+
+::: {.column width="60%"}
+
+### Calendar plots
+
+Using calendar layouts for time plots helps to visualise a large number of frequent (sub-daily) observations.
+
+This is especially useful to show calendar specific patterns such as holidays.
+
+```{r}
+#| echo: true
+#| eval: false
+library(sugrrants)
+vic_elec |> 
+  filter(Time < as.Date("2012-05-01")) |> 
+  ggplot(aes(x = hms::as_hms(Time), y = Demand)) + 
+  geom_line() + 
+  facet_calendar(~ Date, nrow = 2)
+```
+
+:::
+:::
+
+![](../backgrounds/estee-janssens-zni0zgb3bkQ-unsplash.jpg){.image-left}
+
+
+## {}
+
+::: columns
+
+::: {.column width="40%"}
+:::
+
+::: {.column width="60%"}
+
+```{r}
+#| fig-height: 10
+library(sugrrants)
+vic_elec |> 
+  filter(Time < as.Date("2012-05-01")) |> 
+  ggplot(aes(x = hms::as_hms(Time), y = Demand)) + 
+  geom_line() + 
+  scale_x_time(breaks = c(9, 17), labels = c("9AM", "5PM")) +
+  facet_calendar(~ Date, nrow = 2) + 
+  labs(x = "Time")
+```
+
+:::
+:::
+
+![](../backgrounds/estee-janssens-zni0zgb3bkQ-unsplash.jpg){.image-left}
+
+## {.fragment-remove}
+
+::: columns
+
+::: {.column width="60%"}
+
+### Calendar plots
+
+::: callout-caution
+
+## Your turn!
+
+Create a calendar plot for the first few months of pedestrians at Southern Cross Station.
+
+Here's some code to get you started.
+
+```{r}
+#| echo: true
+#| eval: false
+pedestrian |> 
+  filter(Sensor == "Southern Cross Station") |> 
+  filter(Date_Time < as.Date(???)) |> 
+  ggplot(aes(x = hms::as_hms(???), y = ???)) + 
+  geom_line() + 
+  facet_???(???)
+```
+
+Can you see any holiday effects?
+
+:::
+
+:::
+:::
+
+![](../backgrounds/nao-takabayashi-dh_2ouVgIYY-unsplash.jpg){.image-right}
+
+
+## {.fragment-remove}
+
+::: columns
+
+::: {.column width="60%"}
+
+```{r}
+#| echo: true
+#| code-fold: show
+#| fig-height: 8.5
+pedestrian |> 
+  filter(Sensor == "Southern Cross Station") |> 
+  filter(Date_Time < as.Date("2015-05-01")) |> 
+  ggplot(aes(x = hms::as_hms(Date_Time), y = Count)) + 
+  geom_line() + 
+  scale_x_time(breaks = c(9, 17), labels = c("9AM", "5PM")) +
+  facet_calendar(~ Date) + 
+  labs(x = "Time", y = "Pedestrian count")
+```
+
+:::
+:::
+
+![](../backgrounds/nao-takabayashi-dh_2ouVgIYY-unsplash.jpg){.image-right}
+
+## {}
+
+
+::: columns
+::: {.column width="60%"}
+
+::: {.callout}
+## :mortar_board: User-study
+
+We would greatly appreciate if you complete this user study form for to help improve the ggtime package design.
+
+You can find the explanatory statement for this research here: <https://workshop.nectric.com.au/isf2025/ethics/explanatory-statement.pdf>
+
+![](resources/QRCode.gif){height=250px}
+
+You can join my WiFi hotspot if you cannot access Google:
+
+* SSID: IIF-ETSA
+* PASSWORD: 1234567890
+
+:::
+
+:::
+:::
+
+![](../backgrounds/martin-adams-_OZCl4XcpRw-unsplash.jpg){.image-right}
 
 ## That's all we have time for!
 
@@ -83,7 +1490,7 @@ Seasonality and calendrical patterns
 ::: {.callout-note}
 ## I appreciate your feedback
 
-  Short feedback form: <https://feedback.nectric.com.au/pZ26>
+  Short feedback form: <https://feedback.nectric.com.au/w0rw>
 :::
 
 ::: {.callout-link}

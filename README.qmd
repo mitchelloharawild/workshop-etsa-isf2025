@@ -73,8 +73,9 @@ We will start with visualising seasonal patterns in highly aggregated quarterly 
 * Seasonal sub-series plots
 * Exploring seasonality after STL decomposition
 * Multiple seasonality in daily and sub-daily data
-* Local/civil and global/absolute time
 * Calendar plots
+
+<!-- * Local/civil and global/absolute time -->
 
 **User-study** (15:50 - 16:00)
 

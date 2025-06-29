@@ -30,7 +30,7 @@ library(fpp3)
 ::: {.column width="60%"}
 
 ::: {.title data-id="title"}
-Tidy time series analysis and forecasting
+Exploratory time series analysis
 :::
 
 ::: {.subtitle data-id="subtitle"}
@@ -239,14 +239,8 @@ Install them with:
 # The tidy forecasting packages
 install.packages("fpp3")
 
-# The latest time series analysis packages which
-# are being actively developed for research and industry
-# (these will be on CRAN soon!)
-remotes::install_github(c(
-  "mitchelloharawild/vecvec",
-  "mitchelloharawild/mixtime",
-  "mitchelloharawild/ggtime"
-))
+# Calendar visualisation layouts
+install.packages("sugrrants")
 ```
 
 :::
@@ -266,17 +260,27 @@ remotes::install_github(c(
 library(dplyr)
 # Plotting functions
 library(ggplot2)
-# Mixed vectors of time
-library(mixtime)
+# Manipulate time
+library(lubridate)
 # Time series class
 library(tsibble)
 # Tidy time series datasets
 library(tsibbledata)
 # Feature extraction and statistics
 library(feasts)
-# Time series graphics
-library(ggtime)
+# Time series calendar graphics
+library(sugrrants)
 ```
+::: {.fragment .fade-in}
+
+![](resources/fpp3.svg){style="height:200px;float:right;padding-left:10px;margin-top:-50px"}
+```r
+# All of the above
+library(fpp3)
+library(sugrrants)
+```
+:::
+
 
 :::
 :::
@@ -1426,6 +1430,38 @@ tourism |>
   ggplot(aes(x = Quarter, y = Trips)) + geom_line() + 
   facet_grid(vars(Region, State, Purpose), scales = "free_y")
 ```
+
+:::
+:::
+
+![](../backgrounds/jon-tyson-FlHdnPO6dlw-unsplash.jpg){.image-left}
+
+## {}
+
+::: columns
+::: {.column width="40%"}
+:::
+::: {.column width="60%"}
+### Many features for many series
+
+There are many features beyond STL decomposition for describing time series patterns.
+
+```{r}
+#| echo: true
+#| eval: false
+?features_by_tag
+?features_by_pkg
+```
+
+::: {.fragment .fade-in}
+::: {.callout-tip}
+## More applications for features
+
+Features can also be used for other tasks including clustering and anomaly detection.
+
+More info: <https://otexts.com/fpp3/features.html>
+::: 
+:::
 
 :::
 :::

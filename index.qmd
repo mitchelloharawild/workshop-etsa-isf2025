@@ -73,11 +73,12 @@ To be able to complete the exercises of this workshop, please install a suitable
 
 -   **Time series packages and extensions**
     -   fpp3
+    -   sugrrants
 
 The following code will install the main packages needed for the workshop.
 
 ```r
-install.packages(c("fpp3"))
+install.packages(c("fpp3", "sugrrants"))
 ```
 
 Please have the required software installed and pre-work completed before attending the workshop.
