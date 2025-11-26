@@ -40,8 +40,8 @@ website:
           href: slides/patterns/
         - text: Seasonality and calendrical patterns
           href: slides/seasons/
-    # - text: Feedback
-    #   href: https://feedback.nectric.com.au/pZ26
+    - text: Feedback
+      href: https://feedback.nectric.com.au/w0rw
     - text: Exercises
       href: exercises.qmd
     right:
@@ -52,8 +52,8 @@ website:
             href: 'https://github.com/mitchelloharawild/workshop-etsa-isf2025/archive/refs/heads/main.zip'
           # - text: Slides
             # href: 'slides.zip'
-          # - text: Lab sessions
-          #   href: 'labs.zip'
+          - text: Lab sessions
+            href: 'labs.zip'
       - icon: file-certificate
         href: license.qmd
       - icon: github
